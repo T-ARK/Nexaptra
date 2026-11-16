@@ -1,0 +1,9 @@
+# NetScope Tactical PCAP Forensics Platform
+# https://github.com/T-ARK
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /assets/*.map
+
+Sitemap: https://github.com/T-ARK/sitemap.xml

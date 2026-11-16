@@ -3,11 +3,15 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import os
-import shutil
+from pathlib import Path
 import tempfile
 from typing import Any, Dict
-from fastapi import FastAPI, File, HTTPException, UploadFile, status
+
+from fastapi import FastAPI, File, HTTPException, Request, Response, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+
 from app.analyzer import (
     CorruptedCaptureError,
     InvalidCaptureFormatError,
@@ -18,13 +22,14 @@ from app.config import get_settings
 
 settings = get_settings()
 
+# Path to built frontend static bundle (if compiled)
+FRONTEND_DIST_DIR = Path(__file__).resolve().parents[2] / "frontend" / "dist"
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle events for application startup and shutdown."""
-    # Startup: logging and environment validation
     yield
-    # Shutdown: cleanup
 
 
 app = FastAPI(
@@ -45,18 +50,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount frontend assets if directory exists
+if FRONTEND_DIST_DIR.is_dir() and (FRONTEND_DIST_DIR / "assets").is_dir():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(FRONTEND_DIST_DIR / "assets")),
+        name="assets",
+    )
+
 
 @app.get("/", tags=["General"])
-async def root() -> Dict[str, Any]:
-    """Root endpoint providing service metadata."""
-    return {
-        "service": settings.app_name,
-        "version": settings.app_version,
-        "description": settings.app_description,
-        "documentation": "/docs",
-        "health": "/health",
-        "status": "operational",
-    }
+async def root(request: Request) -> Response:
+    """Root endpoint. Serves SPA HTML if requested by browser, or JSON metadata for API clients."""
+    accept_header = request.headers.get("accept", "")
+    index_html = FRONTEND_DIST_DIR / "index.html"
+
+    # If browser requests HTML and frontend is built, serve index.html
+    if "text/html" in accept_header and index_html.is_file():
+        return FileResponse(index_html, media_type="text/html")
+
+    # API default JSON metadata
+    return JSONResponse(
+        content={
+            "service": settings.app_name,
+            "version": settings.app_version,
+            "description": settings.app_description,
+            "documentation": "/docs",
+            "health": "/health",
+            "status": "operational",
+            "author": "ARK",
+            "author_url": "https://github.com/T-ARK",
+        }
+    )
 
 
 @app.get("/health", tags=["Monitoring"])
@@ -75,11 +100,10 @@ async def health_check() -> Dict[str, Any]:
     "/api/v1/analyze",
     status_code=status.HTTP_200_OK,
     tags=["Analysis"],
-    summary="Analyze PCAP/PCAPNG capture (Phase 1 MVP)",
+    summary="Analyze PCAP/PCAPNG capture",
     description=(
         "Upload a .pcap or .pcapng file to extract packet statistics, "
-        "protocol distribution, and top host communications. "
-        "Note: In production (Phase 8), heavy analysis tasks move to Celery/Redis background workers."
+        "protocol distribution, and top host communications."
     ),
 )
 async def analyze_capture(file: UploadFile = File(...)) -> Dict[str, Any]:
@@ -164,7 +188,7 @@ async def analyze_capture(file: UploadFile = File(...)) -> Dict[str, Any]:
         )
     except HTTPException:
         raise
-    except Exception as err:
+    except Exception:
         # Avoid leaking internal traceback details in production
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -188,8 +212,9 @@ async def analyze_capture(file: UploadFile = File(...)) -> Dict[str, Any]:
 )
 async def get_sample_analysis() -> Dict[str, Any]:
     """Analyze the built-in sample capture file for rapid demonstrations."""
-    from pathlib import Path
-    sample_path = Path(__file__).resolve().parents[2] / "sample_pcaps" / "sample_traffic.pcap"
+    sample_path = (
+        Path(__file__).resolve().parents[2] / "sample_pcaps" / "sample_traffic.pcap"
+    )
     if not sample_path.exists():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -206,3 +231,19 @@ async def get_sample_analysis() -> Dict[str, Any]:
         "data": result.to_dict(),
     }
 
+
+# Fallback SPA / static file route for client-side routing on Render
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_spa_or_static(full_path: str, request: Request) -> Response:
+    """Serve static files or route browser navigation back to the React SPA index.html."""
+    if FRONTEND_DIST_DIR.is_dir():
+        candidate_file = FRONTEND_DIST_DIR / full_path
+        if candidate_file.is_file():
+            return FileResponse(candidate_file)
+
+        index_file = FRONTEND_DIST_DIR / "index.html"
+        accept = request.headers.get("accept", "")
+        if "text/html" in accept and index_file.is_file():
+            return FileResponse(index_file, media_type="text/html")
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")

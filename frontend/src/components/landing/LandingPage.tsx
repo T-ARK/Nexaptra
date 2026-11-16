@@ -382,8 +382,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <span>//</span>
             <span>TACTICAL PCAP FORENSICS PLATFORM</span>
           </div>
-          <div>
-            <span>RESEARCH GRADE • B.TECH DATA SCIENCE • SYSTEM ONLINE</span>
+          <div className="flex items-center space-x-3 text-xs font-mono">
+            <span>RESEARCH GRADE</span>
+            <span className="text-[#00ff88]/50">•</span>
+            <span>SYSTEM ONLINE</span>
+            <span className="text-[#00ff88]/50">•</span>
+            <a
+              href="https://github.com/T-ARK"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#888888] hover:text-[#00ff88] transition-colors underline decoration-[#00ff88]/40"
+            >
+              © ARK
+            </a>
           </div>
         </div>
       </footer>

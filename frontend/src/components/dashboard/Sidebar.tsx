@@ -214,13 +214,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
 
           {!collapsed && (
-            <button
-              onClick={onBackToLanding}
-              className="w-full mt-2 flex items-center justify-center space-x-2 p-1.5 text-[10px] font-mono text-[#888888] hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#00ff88]" />
-              <span>RETURN_TO_PORTAL</span>
-            </button>
+            <>
+              <button
+                onClick={onBackToLanding}
+                className="w-full mt-2 flex items-center justify-center space-x-2 p-1.5 text-[10px] font-mono text-[#888888] hover:text-white transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-[#00ff88]" />
+                <span>RETURN_TO_PORTAL</span>
+              </button>
+              <div className="mt-2 pt-2 border-t border-[#181818] flex items-center justify-center text-[9px] font-mono text-[#555555]">
+                <a
+                  href="https://github.com/T-ARK"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#00ff88] transition-colors tracking-widest"
+                >
+                  © ARK // TACTICAL LABS
+                </a>
+              </div>
+            </>
           )}
         </div>
       </aside>

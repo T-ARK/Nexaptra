@@ -1,30 +1,32 @@
 """Application configuration settings for NetScope."""
 
 from functools import lru_cache
+import os
 from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Configuration loaded from environment variables with safe defaults."""
+    """Configuration loaded from environment variables with safe production defaults."""
 
     app_name: str = "NetScope"
     app_version: str = "0.1.0"
     app_description: str = (
         "AI-Driven Network Traffic Analysis and Intelligent PCAP Forensics Platform"
     )
-    environment: str = "development"
-    debug: bool = False
+    environment: str = os.getenv("ENVIRONMENT", "production")
+    debug: bool = os.getenv("DEBUG", "false").lower() in ("true", "1", "yes")
 
-    # Server settings
-    host: str = "127.0.0.1"
-    port: int = 8000
+    # Production Server settings - Default to 0.0.0.0 for containerized / Render binding
+    host: str = os.getenv("HOST", "0.0.0.0")
+    port: int = int(os.getenv("PORT", "8000"))
 
     # Ingestion & Upload limits
-    # Default 25 MB max upload for Phase 1 local MVP
-    max_upload_bytes: int = 25 * 1024 * 1024
+    max_upload_bytes: int = int(
+        os.getenv("MAX_UPLOAD_BYTES", str(50 * 1024 * 1024))
+    )  # 50 MB default
     allowed_extensions: List[str] = [".pcap", ".pcapng"]
-    max_sampled_packets: int = 100
+    max_sampled_packets: int = 150
 
     # CORS settings
     cors_origins: List[str] = [
@@ -32,6 +34,8 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
     ]
 
     model_config = SettingsConfigDict(
@@ -44,4 +48,9 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     """Return a cached singleton instance of application settings."""
-    return Settings()
+    settings = Settings()
+    extra_cors = os.getenv("CORS_ORIGINS")
+    if extra_cors:
+        origins = [orig.strip() for orig in extra_cors.split(",") if orig.strip()]
+        settings.cors_origins.extend(origins)
+    return settings
