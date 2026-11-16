@@ -23,6 +23,7 @@ import {
   ChevronRight,
   X,
 } from 'lucide-react';
+import { NetScopeLogo } from '../common/NetScopeLogo';
 
 export type NavigationPage =
   | 'dashboard'
@@ -172,25 +173,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="h-16 flex items-center px-4 border-b border-[#00ff88]/20 justify-between">
           <div
             onClick={onBackToLanding}
-            className="flex items-center space-x-2.5 cursor-pointer"
+            className="cursor-pointer"
           >
-            <div className="relative flex items-center justify-center w-8 h-8 bg-[#0d0d0d] border border-[#00ff88]/40 shadow-[0_0_10px_rgba(0,255,136,0.2)]">
-              <Shield className="w-4 h-4 text-[#00ff88]" />
-              <div className="hud-corner-tl" />
-              <div className="hud-corner-tr" />
-              <div className="hud-corner-bl" />
-              <div className="hud-corner-br" />
-            </div>
-            {!collapsed && (
-              <div>
-                <span className="text-sm font-display font-bold tracking-wider text-white">
-                  NETSCOPE
-                </span>
-                <span className="block text-[8px] font-mono tracking-widest text-[#888888] uppercase">
-                  TACTICAL FORENSICS
-                </span>
-              </div>
-            )}
+            <NetScopeLogo size="sm" showText={!collapsed} />
           </div>
 
           {/* Close button on mobile */}

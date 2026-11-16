@@ -1,6 +1,7 @@
 import React from 'react';
-import { FileText, Download, Printer, Shield, CheckCircle } from 'lucide-react';
+import { FileText, Download, Printer } from 'lucide-react';
 import { CaptureAnalysisData } from '../../types/api';
+import { NetScopeLogo } from '../common/NetScopeLogo';
 
 interface ReportsViewProps {
   analysisData: CaptureAnalysisData | null;
@@ -116,16 +117,19 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ analysisData }) => {
         <div className="hud-corner-br" />
 
         {/* Header Document Banner */}
-        <div className="border-b border-[#222222] pb-4 flex flex-col sm:flex-row justify-between gap-2">
-          <div>
-            <div className="text-lg font-display font-bold text-white uppercase tracking-wider">
-              NETSCOPE DIGITAL FORENSIC REPORT
-            </div>
-            <div className="text-[10px] text-[#888888]">
-              CASE REFERENCE: NS-2026-PCAP-0081 • ACQUISITION MODE: LIVE STREAM DISSECTION
+        <div className="border-b border-[#222222] pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div className="flex items-center space-x-3">
+            <NetScopeLogo size="md" />
+            <div>
+              <div className="text-base sm:text-lg font-display font-bold text-white uppercase tracking-wider">
+                NETSCOPE DIGITAL FORENSIC REPORT
+              </div>
+              <div className="text-[10px] text-[#888888]">
+                CASE REFERENCE: NS-2026-PCAP-0081 • ACQUISITION MODE: LIVE STREAM DISSECTION
+              </div>
             </div>
           </div>
-          <div className="text-right text-[10px] text-[#888888]">
+          <div className="text-left sm:text-right text-[10px] text-[#888888]">
             <div>DATE: {new Date().toLocaleDateString()}</div>
             <div className="text-[#00ff88] font-bold">STATUS: VERIFIED_AUTHENTIC</div>
           </div>

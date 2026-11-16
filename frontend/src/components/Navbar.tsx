@@ -1,6 +1,7 @@
 import React from 'react';
-import { Shield, Terminal, ExternalLink } from 'lucide-react';
+import { Terminal, ExternalLink } from 'lucide-react';
 import { HealthResponse } from '../types/api';
+import { NetScopeLogo } from './common/NetScopeLogo';
 
 interface NavbarProps {
   health: HealthResponse | null;
@@ -11,29 +12,8 @@ export const Navbar: React.FC<NavbarProps> = ({ health, healthLoading }) => {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-[#010101]/90 border-b border-[#00ff88]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand identity */}
-        <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-9 h-9 bg-[#0a0a0a] border border-[#00ff88]/40 shadow-[0_0_10px_rgba(0,255,136,0.3)]">
-            <Shield className="w-4 h-4 text-[#00ff88]" />
-            <div className="hud-corner-tl" />
-            <div className="hud-corner-tr" />
-            <div className="hud-corner-bl" />
-            <div className="hud-corner-br" />
-          </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="text-base font-display font-bold tracking-wider text-white">
-                NETSCOPE
-              </span>
-              <span className="px-1.5 py-0.2 text-[9px] font-mono uppercase tracking-wider bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 font-bold">
-                [ARSENAL_v1.0]
-              </span>
-            </div>
-            <p className="text-[10px] text-[#888888] font-mono hidden sm:block">
-              // TACTICAL_PCAP_FORENSICS
-            </p>
-          </div>
-        </div>
+        {/* Brand identity with Shield + Mascot */}
+        <NetScopeLogo size="sm" showText={true} />
 
         {/* Status & Navigation */}
         <div className="flex items-center space-x-3">

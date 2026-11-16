@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Shield,
   UploadCloud,
   Layers,
   Activity,
@@ -13,6 +12,7 @@ import {
   Radio,
   Terminal,
 } from 'lucide-react';
+import { NetScopeLogo } from '../common/NetScopeLogo';
 
 interface LandingPageProps {
   onLaunchDashboard: () => void;
@@ -28,26 +28,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* 1. TOP TACTICAL NAVIGATION BAR - CLEAN & NEAT */}
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-[#010101]/95 border-b border-[#00ff88]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Clean Logo without nested buttons */}
+          {/* Clean Shield + Mascot Logo */}
           <div
-            className="flex items-center space-x-3 cursor-pointer"
+            className="cursor-pointer"
             onClick={onLaunchDashboard}
           >
-            <div className="relative flex items-center justify-center w-10 h-10 bg-[#080808] border border-[#00ff88]/40 shadow-[0_0_12px_rgba(0,255,136,0.3)]">
-              <Shield className="w-5 h-5 text-[#00ff88]" />
-              <div className="hud-corner-tl" />
-              <div className="hud-corner-tr" />
-              <div className="hud-corner-bl" />
-              <div className="hud-corner-br" />
-            </div>
-            <div>
-              <span className="text-xl sm:text-2xl font-display font-bold tracking-wider text-white">
-                NETSCOPE
-              </span>
-              <span className="block text-[9px] font-mono tracking-widest text-[#888888] uppercase">
-                TACTICAL PCAP FORENSICS
-              </span>
-            </div>
+            <NetScopeLogo size="md" showText={true} />
           </div>
 
           {/* Right Action Button */}
