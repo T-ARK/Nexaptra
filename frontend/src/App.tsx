@@ -81,7 +81,15 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleFlushAllData = () => {
+    setAnalysisResult(null);
+    setError(null);
+    setUploadProgress(0);
+  };
+
   const handleFileSelected = async (file: File) => {
+    // 1. Immediately flush all previous capture data from system
+    setAnalysisResult(null);
     setError(null);
     setIsAnalyzing(true);
     setUploadProgress(0);
@@ -90,6 +98,7 @@ export const App: React.FC = () => {
       const response = await apiService.uploadCapture(file, (progress) => {
         setUploadProgress(progress);
       });
+      // 2. Set only the newly uploaded capture data
       setAnalysisResult(response.data);
       setViewMode('dashboard');
       setCurrentPage('dashboard');
@@ -316,12 +325,21 @@ export const App: React.FC = () => {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setCurrentPage('upload')}
-                    className="px-4 py-2 text-xs btn-tactical-primary"
-                  >
-                    MOUNT_NEW_CAPTURE
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setCurrentPage('upload')}
+                      className="px-4 py-2 text-xs btn-tactical-primary"
+                    >
+                      MOUNT_NEW_CAPTURE
+                    </button>
+                    <button
+                      onClick={handleFlushAllData}
+                      className="px-3 py-2 text-xs font-mono bg-[#ff003c]/10 text-[#ff003c] border border-[#ff003c]/35 hover:bg-[#ff003c]/20 transition-all font-bold"
+                      title="Flush all loaded telemetry data"
+                    >
+                      FLUSH_ALL_DATA
+                    </button>
+                  </div>
                 </div>
               ) : (
                 /* No Capture Loaded Hero Banner */

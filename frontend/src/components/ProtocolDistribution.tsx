@@ -39,40 +39,40 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
     .sort((a, b) => b.count - a.count);
 
   return (
-    <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+    <div className="p-4 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
       <div className="hud-corner-tl" />
       <div className="hud-corner-tr" />
       <div className="hud-corner-bl" />
       <div className="hud-corner-br" />
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-3">
         <div>
-          <div className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+          <div className="text-[9px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
             // TELEMETRY_BREAKDOWN
           </div>
-          <h4 className="text-base font-display font-bold uppercase text-white tracking-wider">
+          <h4 className="text-xs sm:text-sm font-display font-bold uppercase text-white tracking-wider">
             PROTOCOL_DISTRIBUTION
           </h4>
         </div>
-        <span className="px-2.5 py-1 text-xs font-mono bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 font-bold">
+        <span className="px-2 py-0.5 text-[10px] font-mono bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 font-bold">
           [{chartData.length}_OBSERVED]
         </span>
       </div>
 
-      {/* Recharts Bar Chart */}
-      <div className="h-56 w-full">
+      {/* Reduced Height Compact Bar Chart */}
+      <div className="h-32 sm:h-36 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 10, left: -25, bottom: 5 }}>
             <XAxis
               dataKey="name"
               stroke="#555555"
-              fontSize={10}
+              fontSize={9}
               fontFamily="JetBrains Mono"
               tickLine={false}
             />
             <YAxis
               stroke="#555555"
-              fontSize={10}
+              fontSize={9}
               fontFamily="JetBrains Mono"
               tickLine={false}
             />
@@ -81,9 +81,9 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
                   return (
-                    <div className="p-2.5 bg-[#080808] border border-[#00ff88]/40 text-xs shadow-2xl font-mono">
+                    <div className="p-2 bg-[#080808] border border-[#00ff88]/40 text-[11px] shadow-2xl font-mono">
                       <p className="font-bold text-white uppercase">{data.name}</p>
-                      <p className="text-[#888888] mt-1">
+                      <p className="text-[#888888]">
                         PACKETS: <span className="text-[#00ff88] font-bold">{data.count}</span>
                       </p>
                       <p className="text-[#00e5ff]">
@@ -104,15 +104,15 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
         </ResponsiveContainer>
       </div>
 
-      {/* Legend Badges */}
-      <div className="mt-4 pt-4 border-t border-[#181818] flex flex-wrap gap-2 text-xs font-mono">
+      {/* Compact Legend Chips */}
+      <div className="mt-2 pt-2 border-t border-[#181818] flex flex-wrap gap-1.5 text-[10px] font-mono">
         {chartData.map((item) => (
           <div
             key={item.name}
-            className="flex items-center space-x-1.5 px-2 py-0.5 bg-[#050505] border border-[#222222]"
+            className="flex items-center space-x-1 px-1.5 py-0.5 bg-[#050505] border border-[#222222]"
           >
             <span
-              className="w-2 h-2 rounded-full"
+              className="w-1.5 h-1.5 rounded-full"
               style={{ backgroundColor: item.color }}
             />
             <span className="text-white font-medium">{item.name}</span>
