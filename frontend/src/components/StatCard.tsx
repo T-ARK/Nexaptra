@@ -16,59 +16,71 @@ export const StatCard: React.FC<StatCardProps> = ({
   icon: Icon,
   variant = 'purple',
 }) => {
+  // Map variants to tactical gaming zone aesthetics
   const colorMap = {
     purple: {
-      text: 'text-cyber-purple-light',
-      glow: 'shadow-glow-sm',
-      border: 'border-purple-500/20 hover:border-purple-500/50',
-      iconBg: 'bg-purple-950/40 text-purple-400',
+      text: 'text-[#00ff88]',
+      border: 'border-[#00ff88]/30 hover:border-[#00ff88]',
+      iconColor: 'text-[#00ff88]',
+      iconBg: 'bg-[#00ff88]/10 border border-[#00ff88]/30',
+      badge: 'border-[#00ff88]/30 text-[#00ff88]',
     },
     cyan: {
-      text: 'text-cyber-cyan-light',
-      glow: 'shadow-[0_0_12px_rgba(6,182,212,0.25)]',
-      border: 'border-cyan-500/20 hover:border-cyan-500/50',
-      iconBg: 'bg-cyan-950/40 text-cyan-400',
+      text: 'text-[#00e5ff]',
+      border: 'border-[#00e5ff]/30 hover:border-[#00e5ff]',
+      iconColor: 'text-[#00e5ff]',
+      iconBg: 'bg-[#00e5ff]/10 border border-[#00e5ff]/30',
+      badge: 'border-[#00e5ff]/30 text-[#00e5ff]',
     },
     teal: {
-      text: 'text-teal-400',
-      glow: 'shadow-[0_0_12px_rgba(20,184,166,0.25)]',
-      border: 'border-teal-500/20 hover:border-teal-500/50',
-      iconBg: 'bg-teal-950/40 text-teal-400',
+      text: 'text-[#00ff88]',
+      border: 'border-[#00ff88]/30 hover:border-[#00ff88]',
+      iconColor: 'text-[#00ff88]',
+      iconBg: 'bg-[#00ff88]/10 border border-[#00ff88]/30',
+      badge: 'border-[#00ff88]/30 text-[#00ff88]',
     },
     warning: {
-      text: 'text-amber-400',
-      glow: 'shadow-[0_0_12px_rgba(245,158,11,0.25)]',
-      border: 'border-amber-500/20 hover:border-amber-500/50',
-      iconBg: 'bg-amber-950/40 text-amber-400',
+      text: 'text-[#ff003c]',
+      border: 'border-[#ff003c]/40 hover:border-[#ff003c]',
+      iconColor: 'text-[#ff003c]',
+      iconBg: 'bg-[#ff003c]/10 border border-[#ff003c]/40',
+      badge: 'border-[#ff003c]/30 text-[#ff003c]',
     },
   };
 
-  const style = colorMap[variant];
+  const style = colorMap[variant] || colorMap.purple;
 
   return (
     <div
-      className={`relative p-5 rounded-xl bg-cyber-card border ${style.border} transition-all duration-300 group`}
+      className={`relative p-5 bg-[#0a0a0a] border ${style.border} transition-all duration-200 group`}
     >
+      {/* Corner HUD notches */}
+      <div className="hud-corner-tl" />
+      <div className="hud-corner-tr" />
+      <div className="hud-corner-bl" />
+      <div className="hud-corner-br" />
+
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-mono uppercase tracking-wider text-cyber-muted font-medium mb-1">
-            {label}
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[#888888] font-bold mb-1">
+            [{label}]
           </p>
-          <div className={`text-3xl font-extrabold tracking-tight font-mono ${style.text}`}>
+          <div className={`text-2xl sm:text-3xl font-display font-bold tracking-wider ${style.text}`}>
             {value}
           </div>
           {subValue && (
-            <p className="mt-1 text-xs text-cyber-subtle font-mono">
-              {subValue}
+            <p className="mt-1 text-[11px] text-[#777777] font-mono">
+              // {subValue}
             </p>
           )}
         </div>
-        <div className={`p-2.5 rounded-lg ${style.iconBg} border border-white/5`}>
-          <Icon className="w-5 h-5" />
+        <div className={`p-2.5 ${style.iconBg}`}>
+          <Icon className={`w-5 h-5 ${style.iconColor}`} />
         </div>
       </div>
-      {/* Subtle bottom accent line */}
-      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      {/* Bottom tactical line indicator */}
+      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#00ff88]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 };

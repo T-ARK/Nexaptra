@@ -4,60 +4,153 @@
 
 :root {
   color-scheme: dark;
+  --bg-dark: #010101;
+  --brand-green: #00ff88;
+  --brand-green-dim: rgba(0, 255, 136, 0.1);
+  --brand-green-glow: rgba(0, 255, 136, 0.6);
+  --text-white: #ffffff;
+  --accent-crimson: #ff003c;
+  --font-display: 'Syncopate', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
 }
 
 body {
   margin: 0;
-  background-color: #05040b;
-  color: #f5f1ff;
+  background-color: #010101;
+  color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
-/* Custom scrollbar for dark cyber theme */
+/* Custom scrollbar in tactical green */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #05040b;
+  background: #010101;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #151027;
-  border-radius: 4px;
-  border: 1px solid rgba(160, 100, 255, 0.15);
+  background: #141414;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 255, 136, 0.18);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8b35f5;
-  box-shadow: 0 0 10px rgba(182, 92, 255, 0.5);
+  background: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
 }
 
-/* Neon glow utility classes */
-.neon-glow {
-  box-shadow: 0 0 25px rgba(182, 92, 255, 0.35);
+/* Tactical HUD & Gaming Zone Utilities */
+.tactical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-.neon-glow-sm {
-  box-shadow: 0 0 12px rgba(182, 92, 255, 0.25);
+.tactical-dots {
+  background-image: radial-gradient(rgba(0, 255, 136, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-.neon-border {
-  border: 1px solid rgba(160, 100, 255, 0.18);
+/* HUD corner bracket markers */
+.hud-corner-tl {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00ff88;
+  border-left: 2px solid #00ff88;
+}
+
+.hud-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #00ff88;
+  border-right: 2px solid #00ff88;
+}
+
+.hud-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00ff88;
+  border-left: 2px solid #00ff88;
+}
+
+.hud-corner-br {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #00ff88;
+  border-right: 2px solid #00ff88;
+}
+
+/* Tactical button */
+.btn-tactical-primary {
+  background-color: #00ff88;
+  color: #010101;
+  font-family: 'Syncopate', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 1px solid #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tactical-primary:hover {
+  background-color: #26ff9d;
+  box-shadow: 0 0 35px rgba(0, 255, 136, 0.7);
+  transform: translateY(-1px);
+}
+
+.btn-tactical-outline {
+  background-color: rgba(13, 13, 13, 0.8);
+  color: #00ff88;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tactical-outline:hover {
+  background-color: rgba(0, 255, 136, 0.08);
+  border-color: #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.35);
+  transform: translateY(-1px);
+}
+
+.card-tactical {
+  background-color: #0d0d0d;
+  border: 1px solid rgba(0, 255, 136, 0.18);
+  position: relative;
   transition: all 0.2s ease-in-out;
 }
 
-.neon-border:hover {
-  border-color: rgba(182, 92, 255, 0.5);
-  box-shadow: 0 0 15px rgba(182, 92, 255, 0.2);
+.card-tactical:hover {
+  border-color: rgba(0, 255, 136, 0.45);
+  box-shadow: 0 0 25px rgba(0, 255, 136, 0.15);
 }
 
-/* Glassmorphism panel */
-.glass-panel {
-  background: rgba(16, 13, 30, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(160, 100, 255, 0.18);
+.glow-green-text {
+  text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+}
+
+.glow-crimson-text {
+  text-shadow: 0 0 15px rgba(255, 0, 60, 0.6);
 }

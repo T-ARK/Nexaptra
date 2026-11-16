@@ -24,18 +24,23 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
   });
 
   return (
-    <div className="p-6 rounded-2xl bg-cyber-card border border-cyber-border">
+    <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+      <div className="hud-corner-tl" />
+      <div className="hud-corner-tr" />
+      <div className="hud-corner-bl" />
+      <div className="hud-corner-br" />
+
       {/* Header and Filter Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center space-x-2">
-            <Layers className="w-5 h-5 text-cyber-purple-light" />
-            <h4 className="text-base font-bold text-white tracking-tight">
-              Packet Stream Dissector Sample
+            <Layers className="w-5 h-5 text-[#00ff88]" />
+            <h4 className="text-base font-display font-bold uppercase text-white tracking-wider">
+              STREAMING_PACKET_DISSECTOR
             </h4>
           </div>
-          <p className="text-xs text-cyber-muted font-mono mt-0.5">
-            Streaming bounded frame telemetry (First {packets.length} frames sampled)
+          <p className="text-xs text-[#888888] font-mono mt-0.5">
+            [FIRST_{packets.length}_FRAMES_SAMPLED_IN_MEMORY]
           </p>
         </div>
 
@@ -43,13 +48,13 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
         <div className="flex flex-wrap items-center gap-2">
           {/* Search bar */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-cyber-subtle absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#00ff88] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Filter IP or info..."
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-xs font-mono rounded-lg bg-cyber-surface border border-cyber-border text-white placeholder:text-cyber-subtle focus:outline-none focus:border-cyber-purple transition-colors w-44"
+              className="pl-8 pr-3 py-1.5 text-xs font-mono bg-[#050505] border border-[#00ff88]/25 text-white placeholder:text-[#555555] focus:outline-none focus:border-[#00ff88] transition-colors w-44"
             />
           </div>
 
@@ -58,7 +63,7 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
             <select
               value={selectedProtocol}
               onChange={(e) => setSelectedProtocol(e.target.value)}
-              className="px-3 py-1.5 text-xs font-mono rounded-lg bg-cyber-surface border border-cyber-border text-white focus:outline-none focus:border-cyber-purple transition-colors"
+              className="px-3 py-1.5 text-xs font-mono bg-[#050505] border border-[#00ff88]/25 text-white focus:outline-none focus:border-[#00ff88] transition-colors"
             >
               {protocols.map((proto) => (
                 <option key={proto} value={proto}>
@@ -71,75 +76,69 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
       </div>
 
       {/* Packet Table */}
-      <div className="overflow-x-auto rounded-xl border border-cyber-border">
+      <div className="overflow-x-auto border border-[#222222]">
         <table className="w-full text-left text-xs font-mono">
-          <thead className="bg-cyber-surface text-cyber-subtle border-b border-cyber-border">
+          <thead className="bg-[#050505] text-[#888888] border-b border-[#222222]">
             <tr>
               <th className="py-2.5 px-3 font-semibold w-12 text-center">#</th>
-              <th className="py-2.5 px-3 font-semibold">Time (s)</th>
-              <th className="py-2.5 px-3 font-semibold">Source</th>
-              <th className="py-2.5 px-3 font-semibold">Destination</th>
-              <th className="py-2.5 px-3 font-semibold">Protocol</th>
-              <th className="py-2.5 px-3 font-semibold text-right">Length</th>
-              <th className="py-2.5 px-3 font-semibold">Dissection Summary</th>
+              <th className="py-2.5 px-3 font-semibold">TIME (S)</th>
+              <th className="py-2.5 px-3 font-semibold">SOURCE_ADDR</th>
+              <th className="py-2.5 px-3 font-semibold">DEST_ADDR</th>
+              <th className="py-2.5 px-3 font-semibold">PROTOCOL</th>
+              <th className="py-2.5 px-3 font-semibold text-right">LENGTH</th>
+              <th className="py-2.5 px-3 font-semibold">DISSECTION_SUMMARY</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-cyber-border/40">
+          <tbody className="divide-y divide-[#151515]">
             {filteredPackets.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-cyber-muted">
-                  No packets match the filter criteria.
+                <td colSpan={7} className="py-8 text-center text-[#666666]">
+                  // NO_PACKETS_MATCH_SELECTION
                 </td>
               </tr>
             ) : (
               filteredPackets.map((pkt) => {
-                const protoColor =
+                const protoBadge =
                   pkt.protocol === 'DNS'
                     ? 'text-amber-400 bg-amber-950/30 border-amber-800/40'
                     : pkt.protocol.includes('TLS')
-                    ? 'text-emerald-400 bg-emerald-950/30 border-emerald-800/40'
+                    ? 'text-[#00e5ff] bg-[#00e5ff]/10 border-[#00e5ff]/30'
                     : pkt.protocol === 'HTTP'
-                    ? 'text-cyan-400 bg-cyan-950/30 border-cyan-800/40'
+                    ? 'text-[#00ff88] bg-[#00ff88]/10 border-[#00ff88]/30'
                     : pkt.protocol === 'TCP'
-                    ? 'text-blue-400 bg-blue-950/30 border-blue-800/40'
+                    ? 'text-[#26ff9d] bg-[#26ff9d]/10 border-[#26ff9d]/30'
                     : pkt.protocol === 'UDP'
                     ? 'text-purple-400 bg-purple-950/30 border-purple-800/40'
-                    : 'text-slate-300 bg-slate-800/30 border-slate-700/40';
+                    : 'text-slate-400 bg-slate-900/40 border-slate-700/40';
 
                 return (
                   <tr
                     key={pkt.index}
-                    className="hover:bg-purple-950/20 transition-colors cursor-pointer group"
+                    className="hover:bg-[#00ff88]/5 transition-colors font-mono"
                   >
-                    <td className="py-2 px-3 text-center text-cyber-subtle group-hover:text-cyber-purple-light">
+                    <td className="py-2 px-3 text-center text-[#555555]">
                       {pkt.index}
                     </td>
-                    <td className="py-2 px-3 text-cyber-muted whitespace-nowrap">
+                    <td className="py-2 px-3 text-[#888888]">
                       {pkt.timestamp.toFixed(4)}
                     </td>
-                    <td className="py-2 px-3 text-white whitespace-nowrap">
-                      {pkt.src_ip || '---'}
-                      {pkt.src_port ? (
-                        <span className="text-cyber-subtle">:{pkt.src_port}</span>
-                      ) : null}
+                    <td className="py-2 px-3 text-[#00ff88]">
+                      {pkt.src_ip || 'N/A'}:{pkt.src_port || '*'}
                     </td>
-                    <td className="py-2 px-3 text-white whitespace-nowrap">
-                      {pkt.dst_ip || '---'}
-                      {pkt.dst_port ? (
-                        <span className="text-cyber-subtle">:{pkt.dst_port}</span>
-                      ) : null}
+                    <td className="py-2 px-3 text-[#00e5ff]">
+                      {pkt.dst_ip || 'N/A'}:{pkt.dst_port || '*'}
                     </td>
                     <td className="py-2 px-3">
                       <span
-                        className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${protoColor}`}
+                        className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${protoBadge}`}
                       >
                         {pkt.protocol}
                       </span>
                     </td>
-                    <td className="py-2 px-3 text-right text-cyber-muted">
+                    <td className="py-2 px-3 text-right text-white">
                       {pkt.length} B
                     </td>
-                    <td className="py-2 px-3 text-cyber-text truncate max-w-md">
+                    <td className="py-2 px-3 text-[#aaaaaa] truncate max-w-md">
                       {pkt.summary}
                     </td>
                   </tr>

@@ -20,17 +20,22 @@ export const TopHostsTable: React.FC<TopHostsTableProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Top Source Hosts */}
-      <div className="p-6 rounded-2xl bg-cyber-card border border-cyber-border">
-        <div className="flex items-center space-x-2 mb-4">
-          <div className="p-2 rounded-lg bg-cyan-950/40 text-cyan-400 border border-cyan-800/30">
+      <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+        <div className="hud-corner-tl" />
+        <div className="hud-corner-tr" />
+        <div className="hud-corner-bl" />
+        <div className="hud-corner-br" />
+
+        <div className="flex items-center space-x-2.5 mb-4">
+          <div className="p-2 bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30">
             <ArrowUpRight className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white tracking-tight">
-              Top Source Endpoints (Egress)
+            <h4 className="text-xs font-display font-bold uppercase text-white tracking-wider">
+              SOURCE_ENDPOINTS // EGRESS
             </h4>
-            <p className="text-xs text-cyber-muted font-mono">
-              Hosts originating observed traffic
+            <p className="text-[10px] text-[#888888] font-mono">
+              [TRAFFIC_ORIGIN_HOSTS]
             </p>
           </div>
         </div>
@@ -38,30 +43,30 @@ export const TopHostsTable: React.FC<TopHostsTableProps> = ({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-cyber-border text-cyber-subtle">
-                <th className="pb-2.5 font-medium">IP Address</th>
-                <th className="pb-2.5 font-medium text-right">Packets</th>
-                <th className="pb-2.5 font-medium text-right">Volume</th>
+              <tr className="border-b border-[#222222] text-[#888888]">
+                <th className="pb-2 font-medium">IP_ADDRESS</th>
+                <th className="pb-2 font-medium text-right">PACKETS</th>
+                <th className="pb-2 font-medium text-right">VOLUME</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-cyber-border/40">
+            <tbody className="divide-y divide-[#151515]">
               {topSources.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="py-4 text-center text-cyber-muted">
-                    No source IP telemetry available
+                  <td colSpan={3} className="py-4 text-center text-[#666666]">
+                    // NO_SOURCE_TELEMETRY
                   </td>
                 </tr>
               ) : (
                 topSources.map((host, idx) => (
-                  <tr key={`src-${idx}`} className="hover:bg-cyber-surface/50 transition-colors">
-                    <td className="py-2.5 text-cyber-cyan-light font-medium flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  <tr key={`src-${idx}`} className="hover:bg-[#00ff88]/5 transition-colors">
+                    <td className="py-2.5 text-[#00ff88] font-medium flex items-center space-x-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88]" />
                       <span>{host.ip}</span>
                     </td>
-                    <td className="py-2.5 text-right text-white">
+                    <td className="py-2.5 text-right text-white font-bold">
                       {host.packet_count.toLocaleString()}
                     </td>
-                    <td className="py-2.5 text-right text-cyber-muted">
+                    <td className="py-2.5 text-right text-[#888888]">
                       {formatBytes(host.byte_count)}
                     </td>
                   </tr>
@@ -73,17 +78,22 @@ export const TopHostsTable: React.FC<TopHostsTableProps> = ({
       </div>
 
       {/* Top Destination Hosts */}
-      <div className="p-6 rounded-2xl bg-cyber-card border border-cyber-border">
-        <div className="flex items-center space-x-2 mb-4">
-          <div className="p-2 rounded-lg bg-purple-950/40 text-purple-400 border border-purple-800/30">
+      <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+        <div className="hud-corner-tl" />
+        <div className="hud-corner-tr" />
+        <div className="hud-corner-bl" />
+        <div className="hud-corner-br" />
+
+        <div className="flex items-center space-x-2.5 mb-4">
+          <div className="p-2 bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/30">
             <ArrowDownLeft className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white tracking-tight">
-              Top Destination Endpoints (Ingress)
+            <h4 className="text-xs font-display font-bold uppercase text-white tracking-wider">
+              TARGET_ENDPOINTS // INGRESS
             </h4>
-            <p className="text-xs text-cyber-muted font-mono">
-              Target hosts receiving communications
+            <p className="text-[10px] text-[#888888] font-mono">
+              [TRAFFIC_DESTINATION_NODES]
             </p>
           </div>
         </div>
@@ -91,30 +101,30 @@ export const TopHostsTable: React.FC<TopHostsTableProps> = ({
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-cyber-border text-cyber-subtle">
-                <th className="pb-2.5 font-medium">IP Address</th>
-                <th className="pb-2.5 font-medium text-right">Packets</th>
-                <th className="pb-2.5 font-medium text-right">Volume</th>
+              <tr className="border-b border-[#222222] text-[#888888]">
+                <th className="pb-2 font-medium">IP_ADDRESS</th>
+                <th className="pb-2 font-medium text-right">PACKETS</th>
+                <th className="pb-2 font-medium text-right">VOLUME</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-cyber-border/40">
+            <tbody className="divide-y divide-[#151515]">
               {topDestinations.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="py-4 text-center text-cyber-muted">
-                    No destination IP telemetry available
+                  <td colSpan={3} className="py-4 text-center text-[#666666]">
+                    // NO_DESTINATION_TELEMETRY
                   </td>
                 </tr>
               ) : (
                 topDestinations.map((host, idx) => (
-                  <tr key={`dst-${idx}`} className="hover:bg-cyber-surface/50 transition-colors">
-                    <td className="py-2.5 text-cyber-purple-light font-medium flex items-center space-x-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                  <tr key={`dst-${idx}`} className="hover:bg-[#00e5ff]/5 transition-colors">
+                    <td className="py-2.5 text-[#00e5ff] font-medium flex items-center space-x-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]" />
                       <span>{host.ip}</span>
                     </td>
-                    <td className="py-2.5 text-right text-white">
+                    <td className="py-2.5 text-right text-white font-bold">
                       {host.packet_count.toLocaleString()}
                     </td>
-                    <td className="py-2.5 text-right text-cyber-muted">
+                    <td className="py-2.5 text-right text-[#888888]">
                       {formatBytes(host.byte_count)}
                     </td>
                   </tr>

@@ -14,15 +14,15 @@ interface ProtocolDistributionProps {
   totalPackets: number;
 }
 
-const PROTOCOL_COLORS: Record<string, string> = {
-  'TCP': '#06b6d4',
-  'TLS/HTTPS': '#10b981',
-  'HTTP': '#38bdf8',
-  'UDP': '#8b5cf6',
-  'DNS': '#f59e0b',
-  'ICMP': '#ec4899',
-  'ARP': '#a855f7',
-  'OTHER': '#64748b',
+const TACTICAL_PROTOCOL_COLORS: Record<string, string> = {
+  'TCP': '#00ff88',
+  'TLS/HTTPS': '#00e5ff',
+  'HTTP': '#26ff9d',
+  'UDP': '#8000ff',
+  'DNS': '#ffb700',
+  'ICMP': '#ff003c',
+  'ARP': '#ff0077',
+  'OTHER': '#555555',
 };
 
 export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
@@ -34,23 +34,28 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
       name,
       count,
       percentage: totalPackets > 0 ? ((count / totalPackets) * 100).toFixed(1) : '0',
-      color: PROTOCOL_COLORS[name] || '#94a3b8',
+      color: TACTICAL_PROTOCOL_COLORS[name] || '#00ff88',
     }))
     .sort((a, b) => b.count - a.count);
 
   return (
-    <div className="p-6 rounded-2xl bg-cyber-card border border-cyber-border">
+    <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+      <div className="hud-corner-tl" />
+      <div className="hud-corner-tr" />
+      <div className="hud-corner-bl" />
+      <div className="hud-corner-br" />
+
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h4 className="text-base font-bold text-white tracking-tight">
-            Protocol Distribution
+          <div className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+            // TELEMETRY_BREAKDOWN
+          </div>
+          <h4 className="text-base font-display font-bold uppercase text-white tracking-wider">
+            PROTOCOL_DISTRIBUTION
           </h4>
-          <p className="text-xs text-cyber-muted font-mono mt-0.5">
-            Network layer & application layer breakdown
-          </p>
         </div>
-        <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-purple-950/50 text-purple-300 border border-purple-800/40">
-          {chartData.length} Protocols Observed
+        <span className="px-2.5 py-1 text-xs font-mono bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 font-bold">
+          [{chartData.length}_OBSERVED]
         </span>
       </div>
 
@@ -60,14 +65,14 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
             <XAxis
               dataKey="name"
-              stroke="#64748b"
-              fontSize={11}
+              stroke="#555555"
+              fontSize={10}
               fontFamily="JetBrains Mono"
               tickLine={false}
             />
             <YAxis
-              stroke="#64748b"
-              fontSize={11}
+              stroke="#555555"
+              fontSize={10}
               fontFamily="JetBrains Mono"
               tickLine={false}
             />
@@ -76,13 +81,13 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
                   return (
-                    <div className="p-3 rounded-lg bg-cyber-surface border border-cyber-border text-xs shadow-xl font-mono">
-                      <p className="font-bold text-white">{data.name}</p>
-                      <p className="text-cyber-muted mt-1">
-                        Packets: <span className="text-white font-bold">{data.count}</span>
+                    <div className="p-2.5 bg-[#080808] border border-[#00ff88]/40 text-xs shadow-2xl font-mono">
+                      <p className="font-bold text-white uppercase">{data.name}</p>
+                      <p className="text-[#888888] mt-1">
+                        PACKETS: <span className="text-[#00ff88] font-bold">{data.count}</span>
                       </p>
-                      <p className="text-cyber-purple-light">
-                        Share: <span className="font-bold">{data.percentage}%</span>
+                      <p className="text-[#00e5ff]">
+                        SHARE: <span className="font-bold">{data.percentage}%</span>
                       </p>
                     </div>
                   );
@@ -90,7 +95,7 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
                 return null;
               }}
             />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+            <Bar dataKey="count" radius={[2, 2, 0, 0]}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
@@ -99,20 +104,19 @@ export const ProtocolDistribution: React.FC<ProtocolDistributionProps> = ({
         </ResponsiveContainer>
       </div>
 
-      {/* Protocol Badge Chips */}
-      <div className="mt-4 pt-4 border-t border-cyber-border flex flex-wrap gap-2">
-        {chartData.map((proto) => (
+      {/* Legend Badges */}
+      <div className="mt-4 pt-4 border-t border-[#181818] flex flex-wrap gap-2 text-xs font-mono">
+        {chartData.map((item) => (
           <div
-            key={proto.name}
-            className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-cyber-surface border border-cyber-border text-xs font-mono"
+            key={item.name}
+            className="flex items-center space-x-1.5 px-2 py-0.5 bg-[#050505] border border-[#222222]"
           >
             <span
-              className="w-2.5 h-2.5 rounded-full"
-              style={{ backgroundColor: proto.color }}
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: item.color }}
             />
-            <span className="text-white font-medium">{proto.name}</span>
-            <span className="text-cyber-subtle">({proto.count})</span>
-            <span className="text-cyber-purple-light">{proto.percentage}%</span>
+            <span className="text-white font-medium">{item.name}</span>
+            <span className="text-[#888888]">({item.percentage}%)</span>
           </div>
         ))}
       </div>

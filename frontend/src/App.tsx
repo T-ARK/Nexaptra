@@ -98,7 +98,7 @@ export const App: React.FC = () => {
 
   // 2. RENDER DASHBOARD LAYOUT
   return (
-    <div className="min-h-screen bg-netscope-main text-netscope-text flex font-sans">
+    <div className="min-h-screen bg-[#010101] text-white flex font-sans selection:bg-[#00ff88]/30 selection:text-[#00ff88]">
       {/* Left Sidebar */}
       <Sidebar
         currentPage={currentPage}
@@ -111,7 +111,7 @@ export const App: React.FC = () => {
       {/* Main Content Area */}
       <div
         className={`flex-1 flex flex-col transition-all duration-300 ${
-          sidebarCollapsed ? 'ml-20' : 'ml-64'
+          sidebarCollapsed ? 'ml-16' : 'ml-64'
         }`}
       >
         <TopHeader
@@ -125,10 +125,13 @@ export const App: React.FC = () => {
           {currentPage === 'upload' && (
             <div className="max-w-2xl mx-auto space-y-6 pt-4">
               <div className="text-center">
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Upload PCAP / PCAPNG Capture
+                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                  [ INGESTION_GATEWAY // PCAP_DISSECTOR ]
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-display font-bold uppercase text-white tracking-tight mt-1">
+                  MOUNT CAPTURE <span className="text-[#00ff88]">FILE</span>
                 </h2>
-                <p className="text-xs font-mono text-netscope-muted mt-1">
+                <p className="text-xs font-mono text-[#888888] mt-1">
                   Streaming Scapy Ingestion • Zero Memory Exhaustion • Magic Byte Verified
                 </p>
               </div>
@@ -145,10 +148,13 @@ export const App: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
-                    Packet Explorer
+                  <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                    // FORENSIC_EXPLORER
+                  </span>
+                  <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
+                    FRAME_DISSECTOR
                   </h2>
-                  <p className="text-xs font-mono text-netscope-muted mt-0.5">
+                  <p className="text-xs font-mono text-[#888888] mt-0.5">
                     Frame-level packet dissector and header telemetry
                   </p>
                 </div>
@@ -156,10 +162,20 @@ export const App: React.FC = () => {
               {analysisResult ? (
                 <PacketSampleTable packets={analysisResult.sampled_packets} />
               ) : (
-                <div className="p-12 text-center rounded-2xl bg-netscope-card border border-netscope-border">
-                  <p className="text-sm text-netscope-muted font-mono">
-                    No active capture loaded. Please upload a PCAP file to explore packet records.
+                <div className="p-12 text-center bg-[#0a0a0a] border border-[#00ff88]/20 relative">
+                  <div className="hud-corner-tl" />
+                  <div className="hud-corner-tr" />
+                  <div className="hud-corner-bl" />
+                  <div className="hud-corner-br" />
+                  <p className="text-sm text-[#888888] font-mono">
+                    // NO_ACTIVE_CAPTURE_MOUNTED. UPLOAD A PCAP FILE TO DISSECT FRAMES.
                   </p>
+                  <button
+                    onClick={() => setCurrentPage('upload')}
+                    className="mt-4 px-5 py-2 text-xs btn-tactical-primary"
+                  >
+                    GO_TO_UPLOAD
+                  </button>
                 </div>
               )}
             </div>
@@ -169,25 +185,34 @@ export const App: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">
-                    Interactive Network Graph
+                  <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                    // GRAPH_TOPOLOGY
+                  </span>
+                  <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
+                    NETWORK_GRAPH
                   </h2>
-                  <p className="text-xs font-mono text-netscope-muted mt-0.5">
+                  <p className="text-xs font-mono text-[#888888] mt-0.5">
                     Cytoscape.js host conversation topology & communication clusters
                   </p>
                 </div>
               </div>
-              <div className="h-96 rounded-2xl bg-netscope-card border border-netscope-border p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+              <div className="h-96 bg-[#0a0a0a] border border-[#00ff88]/25 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                <div className="hud-corner-tl" />
+                <div className="hud-corner-tr" />
+                <div className="hud-corner-bl" />
+                <div className="hud-corner-br" />
                 <div
-                  className="absolute inset-0 opacity-20 pointer-events-none"
+                  className="absolute inset-0 opacity-15 pointer-events-none"
                   style={{
-                    backgroundImage: `radial-gradient(rgba(182, 92, 255, 0.4) 1px, transparent 1px)`,
+                    backgroundImage: `radial-gradient(rgba(0, 255, 136, 0.4) 1px, transparent 1px)`,
                     backgroundSize: '24px 24px',
                   }}
                 />
-                <Network className="w-12 h-12 text-netscope-neon mb-3 animate-pulse" />
-                <h3 className="text-base font-bold text-white">Cytoscape Network Engine</h3>
-                <p className="text-xs text-netscope-muted max-w-md mt-1 font-mono">
+                <Network className="w-12 h-12 text-[#00ff88] mb-3 animate-pulse" />
+                <h3 className="text-sm font-display font-bold uppercase text-white">
+                  CYTOSCAPE_NETWORK_ENGINE
+                </h3>
+                <p className="text-xs text-[#888888] max-w-md mt-1 font-mono">
                   Visualizes endpoint nodes, directional edge bandwidth, and suspicious host clustering based on the extracted 5-tuple flow matrix.
                 </p>
               </div>
@@ -197,17 +222,26 @@ export const App: React.FC = () => {
           {currentPage === 'threats' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Cybersecurity Threat Detection
+                <span className="text-[10px] font-mono text-[#ff003c] uppercase tracking-widest font-bold">
+                  // INTRUSION_DETECTION
+                </span>
+                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
+                  THREAT_DETECTION_MATRIX
                 </h2>
-                <p className="text-xs font-mono text-netscope-muted mt-0.5">
+                <p className="text-xs font-mono text-[#888888] mt-0.5">
                   14 Heuristic detection rules with supporting packet evidence
                 </p>
               </div>
-              <div className="p-8 rounded-2xl bg-netscope-card border border-netscope-border text-center">
-                <ShieldAlert className="w-12 h-12 text-netscope-warning mx-auto mb-3" />
-                <h3 className="text-base font-bold text-white">Threat Detection Module (Phase 4)</h3>
-                <p className="text-xs text-netscope-muted max-w-lg mx-auto mt-2 font-mono">
+              <div className="p-8 bg-[#0a0a0a] border border-[#ff003c]/30 text-center relative">
+                <div className="hud-corner-tl" />
+                <div className="hud-corner-tr" />
+                <div className="hud-corner-bl" />
+                <div className="hud-corner-br" />
+                <ShieldAlert className="w-12 h-12 text-[#ff003c] mx-auto mb-3" />
+                <h3 className="text-sm font-display font-bold uppercase text-white">
+                  THREAT_DETECTION_MODULE [14_RULES]
+                </h3>
+                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
                   Monitors port scans, SYN/UDP floods, DNS tunneling, beaconing patterns, and abnormal spikes with calibrated severity and investigation notes.
                 </p>
               </div>
@@ -217,17 +251,26 @@ export const App: React.FC = () => {
           {currentPage === 'ml' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Machine Learning & Explainable AI
+                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                  // EXPLAINABLE_AI
+                </span>
+                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
+                  SHAP_AI_MODELS
                 </h2>
-                <p className="text-xs font-mono text-netscope-muted mt-0.5">
+                <p className="text-xs font-mono text-[#888888] mt-0.5">
                   Isolation Forest • Random Forest • SHAP Feature Importance
                 </p>
               </div>
-              <div className="p-8 rounded-2xl bg-netscope-card border border-netscope-border text-center">
-                <Cpu className="w-12 h-12 text-netscope-neon mx-auto mb-3" />
-                <h3 className="text-base font-bold text-white">ML Analytics Module (Phase 5)</h3>
-                <p className="text-xs text-netscope-muted max-w-lg mx-auto mt-2 font-mono">
+              <div className="p-8 bg-[#0a0a0a] border border-[#00ff88]/25 text-center relative">
+                <div className="hud-corner-tl" />
+                <div className="hud-corner-tr" />
+                <div className="hud-corner-bl" />
+                <div className="hud-corner-br" />
+                <Cpu className="w-12 h-12 text-[#00ff88] mx-auto mb-3" />
+                <h3 className="text-sm font-display font-bold uppercase text-white">
+                  ML_ANALYTICS_MODULE [XAI]
+                </h3>
+                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
                   Extracts 12 flow features to compare unsupervised anomaly scoring with supervised classification. Explains model outputs using SHAP waterfall graphs.
                 </p>
               </div>
@@ -237,17 +280,26 @@ export const App: React.FC = () => {
           {currentPage === 'reports' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Forensic Report Generator
+                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                  // EXPORT_ENGINE
+                </span>
+                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
+                  FORENSIC_REPORTS
                 </h2>
-                <p className="text-xs font-mono text-netscope-muted mt-0.5">
+                <p className="text-xs font-mono text-[#888888] mt-0.5">
                   Automated research reports in PDF, JSON, and CSV formats
                 </p>
               </div>
-              <div className="p-8 rounded-2xl bg-netscope-card border border-netscope-border text-center">
-                <FileText className="w-12 h-12 text-netscope-cyan mx-auto mb-3" />
-                <h3 className="text-base font-bold text-white">Reporting Engine (Phase 7)</h3>
-                <p className="text-xs text-netscope-muted max-w-lg mx-auto mt-2 font-mono">
+              <div className="p-8 bg-[#0a0a0a] border border-[#00ff88]/25 text-center relative">
+                <div className="hud-corner-tl" />
+                <div className="hud-corner-tr" />
+                <div className="hud-corner-bl" />
+                <div className="hud-corner-br" />
+                <FileText className="w-12 h-12 text-[#00ff88] mx-auto mb-3" />
+                <h3 className="text-sm font-display font-bold uppercase text-white">
+                  REPORTING_ENGINE [PUBLICATIONS]
+                </h3>
+                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
                   Compiles executive summaries, technical timelines, and evidentiary packet references into downloadable forensic documentation.
                 </p>
               </div>
@@ -259,94 +311,107 @@ export const App: React.FC = () => {
             <div className="space-y-8">
               {/* Capture Metadata Banner if capture loaded */}
               {analysisResult ? (
-                <div className="p-4 rounded-2xl bg-netscope-card border border-netscope-border flex flex-wrap items-center justify-between gap-4">
+                <div className="p-4 bg-[#0a0a0a] border border-[#00ff88]/30 flex flex-wrap items-center justify-between gap-4 relative">
+                  <div className="hud-corner-tl" />
+                  <div className="hud-corner-tr" />
+                  <div className="hud-corner-bl" />
+                  <div className="hud-corner-br" />
+
                   <div className="flex items-center space-x-3">
-                    <div className="p-2.5 rounded-xl bg-purple-950/60 text-netscope-neon border border-netscope-neon/40 shadow-neon-sm">
+                    <div className="p-2.5 bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30">
                       <FileSearch className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-white font-mono flex items-center space-x-2">
+                      <h3 className="text-xs sm:text-sm font-display font-bold text-white flex items-center space-x-2">
                         <span>{analysisResult.filename}</span>
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950/60 text-netscope-success border border-emerald-800/40">
-                          Verified Format
+                        <span className="px-1.5 py-0.5 text-[9px] font-mono bg-[#00ff88]/15 text-[#00ff88] border border-[#00ff88]/30 font-bold">
+                          [VERIFIED_DLT_EN10MB]
                         </span>
                       </h3>
-                      <p className="text-xs text-netscope-muted font-mono mt-0.5">
-                        {analysisResult.format_type} • {formatBytes(analysisResult.file_size_bytes)} • Duration: {analysisResult.duration_seconds}s
+                      <p className="text-xs text-[#888888] font-mono mt-0.5">
+                        {analysisResult.format_type} • {formatBytes(analysisResult.file_size_bytes)} • DURATION: {analysisResult.duration_seconds}s
                       </p>
                     </div>
                   </div>
 
                   <button
                     onClick={() => setCurrentPage('upload')}
-                    className="px-4 py-2 rounded-xl text-xs font-mono text-white bg-gradient-to-r from-netscope-purple to-netscope-neon hover:from-netscope-violet hover:to-netscope-neon transition-all"
+                    className="px-4 py-2 text-xs btn-tactical-primary"
                   >
-                    Upload New Capture
+                    MOUNT_NEW_CAPTURE
                   </button>
                 </div>
               ) : (
                 /* No Capture Loaded Hero Banner */
-                <div className="p-6 rounded-2xl bg-netscope-card border border-netscope-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/30 flex flex-col sm:flex-row items-center justify-between gap-4 relative">
+                  <div className="hud-corner-tl" />
+                  <div className="hud-corner-tr" />
+                  <div className="hud-corner-bl" />
+                  <div className="hud-corner-br" />
+
                   <div>
-                    <h3 className="text-lg font-bold text-white">
-                      Welcome to NetScope Forensics
+                    <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                      // SYSTEM_READY
+                    </span>
+                    <h3 className="text-lg font-display font-bold uppercase text-white mt-1">
+                      NETSCOPE // TACTICAL_DASHBOARD
                     </h3>
-                    <p className="text-xs text-netscope-muted font-mono mt-1">
-                      Upload a capture file or test the system with the synthetic sample in <code className="text-netscope-neon">sample_pcaps/sample_traffic.pcap</code>.
+                    <p className="text-xs text-[#888888] font-mono mt-1">
+                      Mount a network capture or run synthetic telemetry from <code className="text-[#00ff88]">sample_pcaps/sample_traffic.pcap</code>.
                     </p>
                   </div>
                   <button
                     onClick={() => setCurrentPage('upload')}
-                    className="px-5 py-2.5 rounded-xl text-xs font-mono text-white bg-gradient-to-r from-netscope-purple to-netscope-neon hover:from-netscope-violet hover:to-netscope-neon shadow-neon-sm transition-all shrink-0"
+                    className="px-6 py-2.5 text-xs btn-tactical-primary shrink-0"
                   >
-                    Upload Capture File
+                    MOUNT_CAPTURE_FILE
                   </button>
                 </div>
               )}
 
-              {/* 6 Dashboard Metric Cards (Specified in Section C) */}
+              {/* 6 Dashboard Metric Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <StatCard
-                  label="Total Packets"
+                  label="TOTAL_PACKETS"
                   value={analysisResult ? analysisResult.total_packets.toLocaleString() : '---'}
                   subValue={analysisResult ? 'Frames Ingested' : 'Pending upload'}
                   icon={Layers}
                   variant="purple"
                 />
                 <StatCard
-                  label="Network Flows"
+                  label="NETWORK_FLOWS"
                   value={analysisResult ? (analysisResult.total_packets > 4 ? '5 Flows' : '1 Flow') : '---'}
-                  subValue="5-Tuple Conversations"
+                  subValue="5-Tuple Matrix"
                   icon={Activity}
                   variant="cyan"
                 />
                 <StatCard
-                  label="Active Hosts"
+                  label="ACTIVE_HOSTS"
                   value={
                     analysisResult
                       ? analysisResult.unique_source_ips_count + analysisResult.unique_destination_ips_count
                       : '---'
                   }
-                  subValue={analysisResult ? 'Unique Endpoints' : 'Pending upload'}
+                  subValue={analysisResult ? 'Endpoints' : 'Pending upload'}
                   icon={Users}
                   variant="teal"
                 />
                 <StatCard
-                  label="Suspicious Conns"
+                  label="SUSPICIOUS_CONNS"
                   value={analysisResult ? '0' : '---'}
                   subValue="Port scans / floods"
                   icon={ShieldAlert}
                   variant="warning"
                 />
                 <StatCard
-                  label="Threat Alerts"
+                  label="THREAT_ALERTS"
                   value={analysisResult ? '0' : '---'}
-                  subValue="Heuristic Triggers"
+                  subValue="14 Active Rules"
                   icon={AlertTriangle}
                   variant="warning"
                 />
                 <StatCard
-                  label="Anomaly Score"
+                  label="ANOMALY_SCORE"
                   value={analysisResult ? '0.04' : '---'}
                   subValue="Isolation Forest"
                   icon={Cpu}
