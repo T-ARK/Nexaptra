@@ -8,45 +8,56 @@
 
 body {
   margin: 0;
-  background-color: #080911;
-  color: #f8fafc;
+  background-color: #05040b;
+  color: #f5f1ff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
 /* Custom scrollbar for dark cyber theme */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080911;
+  background: #05040b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2642;
+  background: #151027;
   border-radius: 4px;
+  border: 1px solid rgba(160, 100, 255, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
+  background: #8b35f5;
+  box-shadow: 0 0 10px rgba(182, 92, 255, 0.5);
 }
 
-/* Cyber glow utility classes */
-.neon-glow-purple {
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+/* Neon glow utility classes */
+.neon-glow {
+  box-shadow: 0 0 25px rgba(182, 92, 255, 0.35);
 }
 
-.neon-glow-cyan {
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
+.neon-glow-sm {
+  box-shadow: 0 0 12px rgba(182, 92, 255, 0.25);
 }
 
-.neon-border-purple {
-  border: 1px solid rgba(139, 92, 246, 0.3);
+.neon-border {
+  border: 1px solid rgba(160, 100, 255, 0.18);
+  transition: all 0.2s ease-in-out;
 }
 
-.neon-border-purple:hover {
-  border-color: rgba(139, 92, 246, 0.7);
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+.neon-border:hover {
+  border-color: rgba(182, 92, 255, 0.5);
+  box-shadow: 0 0 15px rgba(182, 92, 255, 0.2);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(16, 13, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(160, 100, 255, 0.18);
 }
