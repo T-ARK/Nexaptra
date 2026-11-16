@@ -42,4 +42,12 @@ export const apiService = {
 
     return response.data;
   },
+
+  /**
+   * Load bundled sample capture analysis
+   */
+  async getSampleCapture(): Promise<AnalysisApiResponse> {
+    const response = await apiClient.get<AnalysisApiResponse>('/api/v1/sample');
+    return response.data;
+  },
 };

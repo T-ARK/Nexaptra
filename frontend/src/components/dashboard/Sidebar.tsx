@@ -21,6 +21,7 @@ import {
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
+  X,
 } from 'lucide-react';
 
 export type NavigationPage =
@@ -48,6 +49,8 @@ interface SidebarProps {
   onBackToLanding: () => void;
   collapsed: boolean;
   onToggleCollapse: () => void;
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 interface NavItem {
@@ -64,6 +67,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onBackToLanding,
   collapsed,
   onToggleCollapse,
+  mobileOpen = false,
+  onCloseMobile,
 }) => {
   const navItems: NavItem[] = [
     // Core
@@ -108,7 +113,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => onSelectPage(item.id)}
+                onClick={() => {
+                  onSelectPage(item.id);
+                  if (onCloseMobile) onCloseMobile();
+                }}
                 className={`w-full flex items-center ${
                   collapsed ? 'justify-center px-0' : 'justify-between px-3'
                 } py-2 text-xs font-mono transition-all duration-150 ${
@@ -146,71 +154,91 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside
-      className={`fixed top-0 bottom-0 left-0 z-40 bg-[#080808] border-r border-[#00ff88]/20 flex flex-col transition-all duration-300 ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
-    >
-      {/* Brand Header */}
-      <div className="h-20 flex items-center px-4 border-b border-[#00ff88]/20 justify-between">
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {mobileOpen && (
         <div
-          onClick={onBackToLanding}
-          className="flex items-center space-x-3 cursor-pointer group"
-        >
-          <div className="relative flex items-center justify-center w-9 h-9 bg-[#0d0d0d] border border-[#00ff88]/40 shadow-[0_0_10px_rgba(0,255,136,0.2)] group-hover:border-[#00ff88] transition-colors">
-            <Shield className="w-4 h-4 text-[#00ff88]" />
-            <div className="hud-corner-tl" />
-            <div className="hud-corner-tr" />
-            <div className="hud-corner-bl" />
-            <div className="hud-corner-br" />
-          </div>
-          {!collapsed && (
-            <div>
-              <span className="text-base font-display font-bold tracking-wider text-white">
-                NETSCOPE
-              </span>
-              <span className="block text-[8px] font-mono tracking-widest text-[#00ff88] uppercase">
-                [TACTICAL_FORENSICS]
-              </span>
+          className="fixed inset-0 bg-black/80 z-40 md:hidden backdrop-blur-sm"
+          onClick={onCloseMobile}
+        />
+      )}
+
+      <aside
+        className={`fixed top-0 bottom-0 left-0 z-50 bg-[#080808] border-r border-[#00ff88]/20 flex flex-col transition-all duration-300 ${
+          collapsed ? 'w-16' : 'w-64'
+        } ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+      >
+        {/* Brand Header */}
+        <div className="h-16 flex items-center px-4 border-b border-[#00ff88]/20 justify-between">
+          <div
+            onClick={onBackToLanding}
+            className="flex items-center space-x-2.5 cursor-pointer"
+          >
+            <div className="relative flex items-center justify-center w-8 h-8 bg-[#0d0d0d] border border-[#00ff88]/40 shadow-[0_0_10px_rgba(0,255,136,0.2)]">
+              <Shield className="w-4 h-4 text-[#00ff88]" />
+              <div className="hud-corner-tl" />
+              <div className="hud-corner-tr" />
+              <div className="hud-corner-bl" />
+              <div className="hud-corner-br" />
             </div>
+            {!collapsed && (
+              <div>
+                <span className="text-sm font-display font-bold tracking-wider text-white">
+                  NETSCOPE
+                </span>
+                <span className="block text-[8px] font-mono tracking-widest text-[#888888] uppercase">
+                  TACTICAL FORENSICS
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Close button on mobile */}
+          {mobileOpen && (
+            <button
+              onClick={onCloseMobile}
+              className="md:hidden p-1 text-[#888888] hover:text-[#00ff88]"
+            >
+              <X className="w-4 h-4" />
+            </button>
           )}
         </div>
-      </div>
 
-      {/* Navigation Groups */}
-      <div className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
-        {renderNavGroup('core', 'CORE_SYSTEM')}
-        {renderNavGroup('forensics', 'FORENSIC_SUITE')}
-        {renderNavGroup('analytics', 'ANALYTICS_XAI')}
-        {renderNavGroup('advanced', 'ARSENAL_REPORTS')}
-      </div>
+        {/* Navigation Groups */}
+        <div className="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+          {renderNavGroup('core', 'CORE_SYSTEM')}
+          {renderNavGroup('forensics', 'FORENSIC_SUITE')}
+          {renderNavGroup('analytics', 'ANALYTICS_XAI')}
+          {renderNavGroup('advanced', 'ARSENAL_REPORTS')}
+        </div>
 
-      {/* Bottom Tactical Status & Collapse Bar */}
-      <div className="p-3 border-t border-[#00ff88]/20 bg-[#050505]">
-        <button
-          onClick={onToggleCollapse}
-          className="w-full flex items-center justify-center p-1.5 text-xs font-mono text-[#888888] hover:text-[#00ff88] hover:bg-[#00ff88]/5 transition-colors border border-[#222222]"
-        >
-          {collapsed ? (
-            <ChevronRight className="w-4 h-4" />
-          ) : (
-            <div className="flex items-center space-x-2">
-              <ChevronLeft className="w-4 h-4" />
-              <span className="text-[10px] tracking-widest font-bold">// COLLAPSE_HUD</span>
-            </div>
-          )}
-        </button>
-
-        {!collapsed && (
+        {/* Bottom Tactical Status & Collapse Bar */}
+        <div className="p-2.5 border-t border-[#00ff88]/20 bg-[#050505]">
           <button
-            onClick={onBackToLanding}
-            className="w-full mt-2 flex items-center justify-center space-x-2 p-1.5 text-[10px] font-mono text-[#888888] hover:text-white transition-colors"
+            onClick={onToggleCollapse}
+            className="w-full hidden md:flex items-center justify-center p-1.5 text-xs font-mono text-[#888888] hover:text-[#00ff88] hover:bg-[#00ff88]/5 transition-colors border border-[#222222]"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#00ff88]" />
-            <span>RETURN_TO_PORTAL</span>
+            {collapsed ? (
+              <ChevronRight className="w-4 h-4" />
+            ) : (
+              <div className="flex items-center space-x-2">
+                <ChevronLeft className="w-4 h-4" />
+                <span className="text-[10px] tracking-widest font-bold">// COLLAPSE_HUD</span>
+              </div>
+            )}
           </button>
-        )}
-      </div>
-    </aside>
+
+          {!collapsed && (
+            <button
+              onClick={onBackToLanding}
+              className="w-full mt-2 flex items-center justify-center space-x-2 p-1.5 text-[10px] font-mono text-[#888888] hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#00ff88]" />
+              <span>RETURN_TO_PORTAL</span>
+            </button>
+          )}
+        </div>
+      </aside>
+    </>
   );
 };

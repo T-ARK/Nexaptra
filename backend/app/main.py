@@ -178,3 +178,31 @@ async def analyze_capture(file: UploadFile = File(...)) -> Dict[str, Any]:
             except OSError:
                 pass
         await file.close()
+
+
+@app.get(
+    "/api/v1/sample",
+    status_code=status.HTTP_200_OK,
+    tags=["Analysis"],
+    summary="Get analysis for the bundled sample PCAP capture",
+)
+async def get_sample_analysis() -> Dict[str, Any]:
+    """Analyze the built-in sample capture file for rapid demonstrations."""
+    from pathlib import Path
+    sample_path = Path(__file__).resolve().parents[2] / "sample_pcaps" / "sample_traffic.pcap"
+    if not sample_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Sample capture file not found on server.",
+        )
+    result = analyze_pcap(
+        file_path=str(sample_path),
+        original_filename="sample_traffic.pcap",
+        max_samples=100,
+    )
+    return {
+        "status": "success",
+        "message": "Sample capture analyzed successfully",
+        "data": result.to_dict(),
+    }
+

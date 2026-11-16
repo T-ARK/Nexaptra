@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PacketSample } from '../types/api';
-import { Layers, Search } from 'lucide-react';
+import { Layers, Search, Eye } from 'lucide-react';
+import { PacketDetailModal } from './PacketDetailModal';
 
 interface PacketSampleTableProps {
   packets: PacketSample[];
@@ -9,6 +10,7 @@ interface PacketSampleTableProps {
 export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets }) => {
   const [filterQuery, setFilterQuery] = useState('');
   const [selectedProtocol, setSelectedProtocol] = useState<string>('ALL');
+  const [inspectedPacket, setInspectedPacket] = useState<PacketSample | null>(null);
 
   const protocols = ['ALL', ...Array.from(new Set(packets.map((p) => p.protocol)))];
 
@@ -24,7 +26,7 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
   });
 
   return (
-    <div className="p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
+    <div className="p-4 sm:p-6 bg-[#0a0a0a] border border-[#00ff88]/25 relative">
       <div className="hud-corner-tl" />
       <div className="hud-corner-tr" />
       <div className="hud-corner-bl" />
@@ -34,13 +36,13 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center space-x-2">
-            <Layers className="w-5 h-5 text-[#00ff88]" />
-            <h4 className="text-base font-display font-bold uppercase text-white tracking-wider">
+            <Layers className="w-4 h-4 text-[#00ff88]" />
+            <h4 className="text-sm sm:text-base font-display font-bold uppercase text-white tracking-wider">
               STREAMING_PACKET_DISSECTOR
             </h4>
           </div>
           <p className="text-xs text-[#888888] font-mono mt-0.5">
-            [FIRST_{packets.length}_FRAMES_SAMPLED_IN_MEMORY]
+            [FIRST_{packets.length}_FRAMES_SAMPLED_IN_MEMORY • CLICK_ROW_TO_INSPECT]
           </p>
         </div>
 
@@ -54,7 +56,7 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
               placeholder="Filter IP or info..."
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-xs font-mono bg-[#050505] border border-[#00ff88]/25 text-white placeholder:text-[#555555] focus:outline-none focus:border-[#00ff88] transition-colors w-44"
+              className="pl-8 pr-3 py-1.5 text-xs font-mono bg-[#050505] border border-[#00ff88]/25 text-white placeholder:text-[#555555] focus:outline-none focus:border-[#00ff88] transition-colors w-40 sm:w-48"
             />
           </div>
 
@@ -77,7 +79,7 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
 
       {/* Packet Table */}
       <div className="overflow-x-auto border border-[#222222]">
-        <table className="w-full text-left text-xs font-mono">
+        <table className="w-full text-left text-xs font-mono whitespace-nowrap">
           <thead className="bg-[#050505] text-[#888888] border-b border-[#222222]">
             <tr>
               <th className="py-2.5 px-3 font-semibold w-12 text-center">#</th>
@@ -87,12 +89,13 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
               <th className="py-2.5 px-3 font-semibold">PROTOCOL</th>
               <th className="py-2.5 px-3 font-semibold text-right">LENGTH</th>
               <th className="py-2.5 px-3 font-semibold">DISSECTION_SUMMARY</th>
+              <th className="py-2.5 px-3 font-semibold text-center">ACTION</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#151515]">
             {filteredPackets.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-[#666666]">
+                <td colSpan={8} className="py-8 text-center text-[#666666]">
                   // NO_PACKETS_MATCH_SELECTION
                 </td>
               </tr>
@@ -114,15 +117,17 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
                 return (
                   <tr
                     key={pkt.index}
-                    className="hover:bg-[#00ff88]/5 transition-colors font-mono"
+                    onClick={() => setInspectedPacket(pkt)}
+                    className="hover:bg-[#00ff88]/10 transition-colors font-mono cursor-pointer group"
+                    title="Click to inspect packet layers"
                   >
-                    <td className="py-2 px-3 text-center text-[#555555]">
+                    <td className="py-2 px-3 text-center text-[#555555] group-hover:text-[#00ff88]">
                       {pkt.index}
                     </td>
                     <td className="py-2 px-3 text-[#888888]">
                       {pkt.timestamp.toFixed(4)}
                     </td>
-                    <td className="py-2 px-3 text-[#00ff88]">
+                    <td className="py-2 px-3 text-[#00ff88] font-bold">
                       {pkt.src_ip || 'N/A'}:{pkt.src_port || '*'}
                     </td>
                     <td className="py-2 px-3 text-[#00e5ff]">
@@ -138,8 +143,20 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
                     <td className="py-2 px-3 text-right text-white">
                       {pkt.length} B
                     </td>
-                    <td className="py-2 px-3 text-[#aaaaaa] truncate max-w-md">
+                    <td className="py-2 px-3 text-[#aaaaaa] truncate max-w-xs sm:max-w-md">
                       {pkt.summary}
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setInspectedPacket(pkt);
+                        }}
+                        className="px-2 py-0.5 bg-[#00ff88]/10 hover:bg-[#00ff88]/30 text-[#00ff88] border border-[#00ff88]/30 text-[10px] inline-flex items-center space-x-1"
+                      >
+                        <Eye className="w-3 h-3" />
+                        <span>INSPECT</span>
+                      </button>
                     </td>
                   </tr>
                 );
@@ -148,6 +165,12 @@ export const PacketSampleTable: React.FC<PacketSampleTableProps> = ({ packets })
           </tbody>
         </table>
       </div>
+
+      {/* Packet Inspection Modal */}
+      <PacketDetailModal
+        packet={inspectedPacket}
+        onClose={() => setInspectedPacket(null)}
+      />
     </div>
   );
 };

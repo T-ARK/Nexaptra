@@ -6,9 +6,7 @@ import {
   AlertTriangle,
   Activity,
   FileSearch,
-  Network,
   Cpu,
-  FileText,
 } from 'lucide-react';
 import { LandingPage } from './components/landing/LandingPage';
 import { Sidebar, NavigationPage } from './components/dashboard/Sidebar';
@@ -18,6 +16,23 @@ import { UploadDropzone } from './components/UploadDropzone';
 import { ProtocolDistribution } from './components/ProtocolDistribution';
 import { TopHostsTable } from './components/TopHostsTable';
 import { PacketSampleTable } from './components/PacketSampleTable';
+
+// View Modules
+import { FlowsView } from './components/views/FlowsView';
+import { HostsView } from './components/views/HostsView';
+import { DnsView } from './components/views/DnsView';
+import { ProtocolsView } from './components/views/ProtocolsView';
+import { ThreatsView } from './components/views/ThreatsView';
+import { MlView } from './components/views/MlView';
+import { NetworkView } from './components/views/NetworkView';
+import { TimelineView } from './components/views/TimelineView';
+import { AiAssistantView } from './components/views/AiAssistantView';
+import { ReportsView } from './components/views/ReportsView';
+import { HistoryView } from './components/views/HistoryView';
+import { ComparisonView } from './components/views/ComparisonView';
+import { ResearchView } from './components/views/ResearchView';
+import { SettingsView } from './components/views/SettingsView';
+
 import { apiService } from './services/api';
 import { CaptureAnalysisData, HealthResponse } from './types/api';
 
@@ -26,6 +41,7 @@ export const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<'landing' | 'dashboard'>('landing');
   const [currentPage, setCurrentPage] = useState<NavigationPage>('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState<boolean>(false);
 
   // Telemetry & Analysis state
   const [health, setHealth] = useState<HealthResponse | null>(null);
@@ -35,9 +51,10 @@ export const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<CaptureAnalysisData | null>(null);
 
-  // Poll backend health on startup
+  // Poll backend health and pre-load sample capture on startup
   useEffect(() => {
     checkBackendHealth();
+    loadBundledSample();
   }, []);
 
   const checkBackendHealth = async () => {
@@ -50,6 +67,17 @@ export const App: React.FC = () => {
       setHealth(null);
     } finally {
       setHealthLoading(false);
+    }
+  };
+
+  const loadBundledSample = async () => {
+    try {
+      const res = await apiService.getSampleCapture();
+      if (res && res.data) {
+        setAnalysisResult(res.data);
+      }
+    } catch (err) {
+      console.warn('Could not auto-load sample capture, waiting for manual upload:', err);
     }
   };
 
@@ -83,6 +111,26 @@ export const App: React.FC = () => {
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
+  const pageTitleMap: Record<NavigationPage, string> = {
+    dashboard: 'TELEMETRY_DASHBOARD',
+    upload: 'PCAP_INGESTION_GATEWAY',
+    history: 'CAPTURE_SESSION_LOGS',
+    packets: 'FRAME_DISSECTOR_INSPECTOR',
+    flows: 'FLOW_CONVERSATIONS_5TUPLE',
+    hosts: 'HOST_TARGET_INVENTORY',
+    dns: 'DNS_INTELLIGENCE_QUERIES',
+    protocols: 'PROTOCOL_TELEMETRY_MATRIX',
+    threats: 'THREAT_DETECTION_MATRIX',
+    ml: 'SHAP_EXPLAINABLE_AI_MODELS',
+    network: 'NETWORK_TOPOLOGY_COMM_GRAPH',
+    timeline: 'EVENT_CHRONOLOGY_TIMELINE',
+    'ai-assistant': 'FORENSIC_AI_COPILOT',
+    reports: 'FORENSIC_REPORT_COMPILER',
+    comparison: 'PCAP_DIFF_TOOL',
+    research: 'RESEARCH_LAB_ENTROPY',
+    settings: 'SYSTEM_CONFIG_SETTINGS',
+  };
+
   // 1. RENDER LANDING PAGE
   if (viewMode === 'landing') {
     return (
@@ -102,77 +150,90 @@ export const App: React.FC = () => {
       {/* Left Sidebar */}
       <Sidebar
         currentPage={currentPage}
-        onSelectPage={(page) => setCurrentPage(page)}
+        onSelectPage={(page) => {
+          setCurrentPage(page);
+          setMobileSidebarOpen(false);
+        }}
         onBackToLanding={() => setViewMode('landing')}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content Area */}
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ${
-          sidebarCollapsed ? 'ml-16' : 'ml-64'
+        className={`flex-1 flex flex-col transition-all duration-300 w-full overflow-x-hidden ${
+          sidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
         }`}
       >
         <TopHeader
           currentCaptureName={analysisResult?.filename || null}
           health={health}
           healthLoading={healthLoading}
+          onToggleSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          currentPageTitle={pageTitleMap[currentPage]}
         />
 
-        <main className="flex-1 p-6 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
-          {/* Page Routing Dispatch */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+          {/* UPLOAD PAGE */}
           {currentPage === 'upload' && (
-            <div className="max-w-2xl mx-auto space-y-6 pt-4">
+            <div className="max-w-2xl mx-auto space-y-6 pt-2">
               <div className="text-center">
                 <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
                   [ INGESTION_GATEWAY // PCAP_DISSECTOR ]
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-display font-bold uppercase text-white tracking-tight mt-1">
+                <h2 className="text-xl sm:text-2xl font-display font-bold uppercase text-white tracking-tight mt-1">
                   MOUNT CAPTURE <span className="text-[#00ff88]">FILE</span>
                 </h2>
                 <p className="text-xs font-mono text-[#888888] mt-1">
                   Streaming Scapy Ingestion • Zero Memory Exhaustion • Magic Byte Verified
                 </p>
               </div>
+
               <UploadDropzone
                 onFileSelected={handleFileSelected}
                 isLoading={isAnalyzing}
                 uploadProgress={uploadProgress}
                 error={error}
               />
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={loadBundledSample}
+                  className="text-xs font-mono text-[#888888] hover:text-[#00ff88] transition-colors underline underline-offset-4"
+                >
+                  // Or click here to mount bundled sample_traffic.pcap
+                </button>
+              </div>
             </div>
           )}
 
+          {/* PACKET EXPLORER */}
           {currentPage === 'packets' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
-                    // FORENSIC_EXPLORER
-                  </span>
-                  <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
-                    FRAME_DISSECTOR
-                  </h2>
-                  <p className="text-xs font-mono text-[#888888] mt-0.5">
-                    Frame-level packet dissector and header telemetry
-                  </p>
-                </div>
+              <div>
+                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
+                  // FORENSIC_EXPLORER
+                </span>
+                <h2 className="text-xl sm:text-2xl font-display font-bold uppercase text-white tracking-tight">
+                  FRAME_DISSECTOR
+                </h2>
+                <p className="text-xs font-mono text-[#888888] mt-0.5">
+                  Frame-level packet dissector and layer header telemetry
+                </p>
               </div>
               {analysisResult ? (
                 <PacketSampleTable packets={analysisResult.sampled_packets} />
               ) : (
-                <div className="p-12 text-center bg-[#0a0a0a] border border-[#00ff88]/20 relative">
-                  <div className="hud-corner-tl" />
-                  <div className="hud-corner-tr" />
-                  <div className="hud-corner-bl" />
-                  <div className="hud-corner-br" />
-                  <p className="text-sm text-[#888888] font-mono">
+                <div className="p-8 text-center bg-[#0a0a0a] border border-[#00ff88]/20 relative">
+                  <p className="text-xs text-[#888888] font-mono mb-3">
                     // NO_ACTIVE_CAPTURE_MOUNTED. UPLOAD A PCAP FILE TO DISSECT FRAMES.
                   </p>
                   <button
                     onClick={() => setCurrentPage('upload')}
-                    className="mt-4 px-5 py-2 text-xs btn-tactical-primary"
+                    className="px-4 py-2 text-xs btn-tactical-primary"
                   >
                     GO_TO_UPLOAD
                   </button>
@@ -181,135 +242,56 @@ export const App: React.FC = () => {
             </div>
           )}
 
-          {currentPage === 'network' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
-                    // GRAPH_TOPOLOGY
-                  </span>
-                  <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
-                    NETWORK_GRAPH
-                  </h2>
-                  <p className="text-xs font-mono text-[#888888] mt-0.5">
-                    Cytoscape.js host conversation topology & communication clusters
-                  </p>
-                </div>
-              </div>
-              <div className="h-96 bg-[#0a0a0a] border border-[#00ff88]/25 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                <div className="hud-corner-tl" />
-                <div className="hud-corner-tr" />
-                <div className="hud-corner-bl" />
-                <div className="hud-corner-br" />
-                <div
-                  className="absolute inset-0 opacity-15 pointer-events-none"
-                  style={{
-                    backgroundImage: `radial-gradient(rgba(0, 255, 136, 0.4) 1px, transparent 1px)`,
-                    backgroundSize: '24px 24px',
-                  }}
-                />
-                <Network className="w-12 h-12 text-[#00ff88] mb-3 animate-pulse" />
-                <h3 className="text-sm font-display font-bold uppercase text-white">
-                  CYTOSCAPE_NETWORK_ENGINE
-                </h3>
-                <p className="text-xs text-[#888888] max-w-md mt-1 font-mono">
-                  Visualizes endpoint nodes, directional edge bandwidth, and suspicious host clustering based on the extracted 5-tuple flow matrix.
-                </p>
-              </div>
-            </div>
+          {/* FLOWS VIEW */}
+          {currentPage === 'flows' && <FlowsView analysisData={analysisResult} />}
+
+          {/* HOSTS VIEW */}
+          {currentPage === 'hosts' && <HostsView analysisData={analysisResult} />}
+
+          {/* DNS INTELLIGENCE */}
+          {currentPage === 'dns' && <DnsView analysisData={analysisResult} />}
+
+          {/* PROTOCOLS VIEW */}
+          {currentPage === 'protocols' && <ProtocolsView analysisData={analysisResult} />}
+
+          {/* THREATS DETECTION VIEW */}
+          {currentPage === 'threats' && <ThreatsView analysisData={analysisResult} />}
+
+          {/* ML & SHAP VIEW */}
+          {currentPage === 'ml' && <MlView analysisData={analysisResult} />}
+
+          {/* NETWORK TOPOLOGY VIEW */}
+          {currentPage === 'network' && <NetworkView analysisData={analysisResult} />}
+
+          {/* EVENT TIMELINE */}
+          {currentPage === 'timeline' && <TimelineView analysisData={analysisResult} />}
+
+          {/* AI COPILOT */}
+          {currentPage === 'ai-assistant' && <AiAssistantView analysisData={analysisResult} />}
+
+          {/* FORENSIC REPORTS */}
+          {currentPage === 'reports' && <ReportsView analysisData={analysisResult} />}
+
+          {/* CAPTURE HISTORY */}
+          {currentPage === 'history' && (
+            <HistoryView currentCapture={analysisResult} onMountSample={loadBundledSample} />
           )}
 
-          {currentPage === 'threats' && (
-            <div className="space-y-6">
-              <div>
-                <span className="text-[10px] font-mono text-[#ff003c] uppercase tracking-widest font-bold">
-                  // INTRUSION_DETECTION
-                </span>
-                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
-                  THREAT_DETECTION_MATRIX
-                </h2>
-                <p className="text-xs font-mono text-[#888888] mt-0.5">
-                  14 Heuristic detection rules with supporting packet evidence
-                </p>
-              </div>
-              <div className="p-8 bg-[#0a0a0a] border border-[#ff003c]/30 text-center relative">
-                <div className="hud-corner-tl" />
-                <div className="hud-corner-tr" />
-                <div className="hud-corner-bl" />
-                <div className="hud-corner-br" />
-                <ShieldAlert className="w-12 h-12 text-[#ff003c] mx-auto mb-3" />
-                <h3 className="text-sm font-display font-bold uppercase text-white">
-                  THREAT_DETECTION_MODULE [14_RULES]
-                </h3>
-                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
-                  Monitors port scans, SYN/UDP floods, DNS tunneling, beaconing patterns, and abnormal spikes with calibrated severity and investigation notes.
-                </p>
-              </div>
-            </div>
+          {/* PCAP COMPARISON */}
+          {currentPage === 'comparison' && <ComparisonView currentCapture={analysisResult} />}
+
+          {/* RESEARCH LAB */}
+          {currentPage === 'research' && <ResearchView analysisData={analysisResult} />}
+
+          {/* SETTINGS */}
+          {currentPage === 'settings' && (
+            <SettingsView onResetSession={() => setAnalysisResult(null)} />
           )}
 
-          {currentPage === 'ml' && (
-            <div className="space-y-6">
-              <div>
-                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
-                  // EXPLAINABLE_AI
-                </span>
-                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
-                  SHAP_AI_MODELS
-                </h2>
-                <p className="text-xs font-mono text-[#888888] mt-0.5">
-                  Isolation Forest • Random Forest • SHAP Feature Importance
-                </p>
-              </div>
-              <div className="p-8 bg-[#0a0a0a] border border-[#00ff88]/25 text-center relative">
-                <div className="hud-corner-tl" />
-                <div className="hud-corner-tr" />
-                <div className="hud-corner-bl" />
-                <div className="hud-corner-br" />
-                <Cpu className="w-12 h-12 text-[#00ff88] mx-auto mb-3" />
-                <h3 className="text-sm font-display font-bold uppercase text-white">
-                  ML_ANALYTICS_MODULE [XAI]
-                </h3>
-                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
-                  Extracts 12 flow features to compare unsupervised anomaly scoring with supervised classification. Explains model outputs using SHAP waterfall graphs.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {currentPage === 'reports' && (
-            <div className="space-y-6">
-              <div>
-                <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
-                  // EXPORT_ENGINE
-                </span>
-                <h2 className="text-2xl font-display font-bold uppercase text-white tracking-tight">
-                  FORENSIC_REPORTS
-                </h2>
-                <p className="text-xs font-mono text-[#888888] mt-0.5">
-                  Automated research reports in PDF, JSON, and CSV formats
-                </p>
-              </div>
-              <div className="p-8 bg-[#0a0a0a] border border-[#00ff88]/25 text-center relative">
-                <div className="hud-corner-tl" />
-                <div className="hud-corner-tr" />
-                <div className="hud-corner-bl" />
-                <div className="hud-corner-br" />
-                <FileText className="w-12 h-12 text-[#00ff88] mx-auto mb-3" />
-                <h3 className="text-sm font-display font-bold uppercase text-white">
-                  REPORTING_ENGINE [PUBLICATIONS]
-                </h3>
-                <p className="text-xs text-[#888888] max-w-lg mx-auto mt-2 font-mono">
-                  Compiles executive summaries, technical timelines, and evidentiary packet references into downloadable forensic documentation.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Default Dashboard View */}
+          {/* DEFAULT TELEMETRY DASHBOARD */}
           {currentPage === 'dashboard' && (
-            <div className="space-y-8">
-              {/* Capture Metadata Banner if capture loaded */}
+            <div className="space-y-6 sm:space-y-8">
+              {/* Capture Metadata Banner */}
               {analysisResult ? (
                 <div className="p-4 bg-[#0a0a0a] border border-[#00ff88]/30 flex flex-wrap items-center justify-between gap-4 relative">
                   <div className="hud-corner-tl" />
@@ -353,7 +335,7 @@ export const App: React.FC = () => {
                     <span className="text-[10px] font-mono text-[#00ff88] uppercase tracking-widest font-bold">
                       // SYSTEM_READY
                     </span>
-                    <h3 className="text-lg font-display font-bold uppercase text-white mt-1">
+                    <h3 className="text-base sm:text-lg font-display font-bold uppercase text-white mt-1">
                       NETSCOPE // TACTICAL_DASHBOARD
                     </h3>
                     <p className="text-xs text-[#888888] font-mono mt-1">
@@ -361,16 +343,16 @@ export const App: React.FC = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => setCurrentPage('upload')}
-                    className="px-6 py-2.5 text-xs btn-tactical-primary shrink-0"
+                    onClick={loadBundledSample}
+                    className="px-5 py-2.5 text-xs btn-tactical-primary shrink-0"
                   >
-                    MOUNT_CAPTURE_FILE
+                    LOAD_SAMPLE_DATA
                   </button>
                 </div>
               )}
 
               {/* 6 Dashboard Metric Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
                 <StatCard
                   label="TOTAL_PACKETS"
                   value={analysisResult ? analysisResult.total_packets.toLocaleString() : '---'}
