@@ -1,4 +1,4 @@
-"""FastAPI application entrypoint for NetScope."""
+"""FastAPI application entrypoint for Nexaptra."""
 
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -140,7 +140,7 @@ async def analyze_capture(file: UploadFile = File(...)) -> Dict[str, Any]:
         )
 
     # 3. Stream content safely to a temporary file
-    temp_fd, temp_path = tempfile.mkstemp(prefix="netscope_upload_", suffix=ext)
+    temp_fd, temp_path = tempfile.mkstemp(prefix="nexaptra_upload_", suffix=ext)
     total_bytes_read = 0
 
     try:

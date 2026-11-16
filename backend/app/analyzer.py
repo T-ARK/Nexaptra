@@ -1,4 +1,4 @@
-"""PCAP and PCAPNG streaming packet analyzer for NetScope.
+"""PCAP and PCAPNG streaming packet analyzer for Nexaptra.
 
 Designed to safely process capture files using streaming iterators (Scapy PcapReader)
 without loading entire capture files into system memory.

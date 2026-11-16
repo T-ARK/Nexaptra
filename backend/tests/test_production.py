@@ -1,4 +1,4 @@
-"""Production integration tests for NetScope SPA serving, SEO files, and API endpoints."""
+"""Production integration tests for Nexaptra SPA serving, SEO files, and API endpoints."""
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -13,7 +13,7 @@ async def test_spa_index_html_serving():
         response = await client.get("/", headers={"Accept": "text/html,application/xhtml+xml"})
         assert response.status_code == 200
         html = response.text
-        assert "NetScope" in html
+        assert "Nexaptra" in html
         assert "https://github.com/T-ARK" in html
         assert "application/ld+json" in html
 

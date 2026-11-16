@@ -350,7 +350,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="hud-corner-br" />
 
             <h2 className="text-xl sm:text-2xl font-display font-bold uppercase text-white mb-2">
-              EQUIP <span className="text-[#00ff88]">NETSCOPE</span> NOW
+              EQUIP <span className="text-[#00ff88]">NEXAPTRA</span> NOW
             </h2>
             <p className="text-xs text-[#888888] font-sans max-w-md mx-auto mb-6">
               Mount your `.pcap` or `.pcapng` capture file to begin deep packet dissection and AI threat classification.
@@ -378,7 +378,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <footer className="py-6 border-t border-[#181818] bg-[#020202] text-xs font-mono text-[#666666]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
-            <span className="text-[#00ff88] font-display font-bold">NETSCOPE</span>
+            <span className="text-[#00ff88] font-display font-bold">NEXAPTRA</span>
             <span>//</span>
             <span>TACTICAL PCAP FORENSICS PLATFORM</span>
           </div>

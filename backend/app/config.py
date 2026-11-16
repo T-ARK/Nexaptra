@@ -1,4 +1,4 @@
-"""Application configuration settings for NetScope."""
+"""Application configuration settings for Nexaptra."""
 
 from functools import lru_cache
 import os
@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Configuration loaded from environment variables with safe production defaults."""
 
-    app_name: str = "NetScope"
+    app_name: str = os.getenv("APP_NAME", "Nexaptra")
     app_version: str = "0.1.0"
     app_description: str = (
         "AI-Driven Network Traffic Analysis and Intelligent PCAP Forensics Platform"
@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     ]
 
     model_config = SettingsConfigDict(
-        env_prefix="NETSCOPE_",
+        env_prefix="NEXAPTRA_",
         env_file=".env",
         extra="ignore",
     )

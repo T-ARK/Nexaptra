@@ -354,7 +354,7 @@ export const App: React.FC = () => {
                       // SYSTEM_READY
                     </span>
                     <h3 className="text-base sm:text-lg font-display font-bold uppercase text-white mt-1">
-                      NETSCOPE // TACTICAL_DASHBOARD
+                      NEXAPTRA // TACTICAL_DASHBOARD
                     </h3>
                     <p className="text-xs text-[#888888] font-mono mt-1">
                       Mount a network capture or run synthetic telemetry from <code className="text-[#00ff88]">sample_pcaps/sample_traffic.pcap</code>.

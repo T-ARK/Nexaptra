@@ -1,3 +1,3 @@
-"""NetScope Backend Package."""
+"""Nexaptra Backend Package."""
 
 __version__ = "0.1.0"

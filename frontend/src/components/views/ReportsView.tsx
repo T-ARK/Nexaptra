@@ -15,7 +15,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ analysisData }) => {
 
   const downloadJsonReport = () => {
     const reportData = {
-      project: 'NetScope Intelligent PCAP Forensics Platform',
+      project: 'Nexaptra Intelligent PCAP Forensics Platform',
       report_generated_at: new Date().toISOString(),
       metadata: {
         filename,
@@ -39,7 +39,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ analysisData }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `netscope_forensic_report_${Date.now()}.json`;
+    a.download = `nexaptra_forensic_report_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -63,7 +63,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ analysisData }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `netscope_packets_${Date.now()}.csv`;
+    a.download = `nexaptra_packets_${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -122,7 +122,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ analysisData }) => {
             <NetScopeLogo size="md" />
             <div>
               <div className="text-base sm:text-lg font-display font-bold text-white uppercase tracking-wider">
-                NETSCOPE DIGITAL FORENSIC REPORT
+                NEXAPTRA DIGITAL FORENSIC REPORT
               </div>
               <div className="text-[10px] text-[#888888]">
                 CASE REFERENCE: NS-2026-PCAP-0081 • ACQUISITION MODE: LIVE STREAM DISSECTION

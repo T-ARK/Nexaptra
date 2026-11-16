@@ -20,7 +20,7 @@ async def test_root_endpoint():
         response = await client.get("/")
         assert response.status_code == 200
         data = response.json()
-        assert data["service"] == "NetScope"
+        assert data["service"] == "Nexaptra"
         assert data["status"] == "operational"
         assert "version" in data
 
@@ -34,7 +34,7 @@ async def test_health_endpoint():
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "healthy"
-        assert data["service"] == "NetScope"
+        assert data["service"] == "Nexaptra"
         assert "timestamp" in data
 
 

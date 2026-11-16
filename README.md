@@ -1,4 +1,4 @@
-# NetScope — AI-Driven Network Traffic Analysis & Forensic PCAP Platform
+# Nexaptra — AI-Driven Network Traffic Analysis & Forensic PCAP Platform
 
 <div align="center">
 
@@ -20,7 +20,7 @@
 ---
 
 > ### 🌐 **Live Interactive Platform:** [https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)
-> **NetScope is live on Render.** Explore the pre-parsed telemetry dataset, upload custom `.pcap` or `.pcapng` files for instant streaming dissection, inspect bidirectional 5-tuple flows, visualize live network topology, and evaluate the 14-rule threat hunting matrix.
+> **Nexaptra is live on Render.** Explore the pre-parsed telemetry dataset, upload custom `.pcap` or `.pcapng` files for instant streaming dissection, inspect bidirectional 5-tuple flows, visualize live network topology, and evaluate the 14-rule threat hunting matrix.
 
 ---
 
@@ -42,7 +42,7 @@
 
 ## Overview & Architecture
 
-**NetScope** is a digital network forensics and automated incident response platform engineered to replace memory-intensive PCAP parsers with low-overhead, stream-based packet dissection. Designed for SOC analysts, DFIR teams, and cybersecurity researchers, NetScope couples low-level protocol inspection with an automated 14-rule intrusion detection matrix and explainable anomaly modeling.
+**Nexaptra** is a digital network forensics and automated incident response platform engineered to replace memory-intensive PCAP parsers with low-overhead, stream-based packet dissection. Designed for SOC analysts, DFIR teams, and cybersecurity researchers, Nexaptra couples low-level protocol inspection with an automated 14-rule intrusion detection matrix and explainable anomaly modeling.
 
 ### System Data Flow
 
@@ -111,7 +111,7 @@
 
 ## 14-Rule Threat Hunting Matrix
 
-NetScope's built-in heuristic engine evaluates captures against 14 foundational MITRE ATT&CK-aligned network intrusion indicators:
+Nexaptra's built-in heuristic engine evaluates captures against 14 foundational MITRE ATT&CK-aligned network intrusion indicators:
 
 | # | Rule Name | Category | Detection Criteria |
 | :-: | :--- | :--- | :--- |
@@ -134,12 +134,12 @@ NetScope's built-in heuristic engine evaluates captures against 14 foundational 
 
 ## Live Platform Demonstration
 
-NetScope is continuously deployed and accessible online:
+Nexaptra is continuously deployed and accessible online:
 
 🔗 **[https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)**
 
 1. **One-Click Pre-Parsed Telemetry:** Click **"Explore Dashboard"** to instantly load the built-in synthetic PCAP (`sample_traffic.pcap`), demonstrating DNS resolution, HTTP conversations, TLS handshakes, and ICMP frames.
-2. **Custom PCAP Upload:** Click **"Upload PCAP Capture"** to drag-and-drop your own `.pcap` or `.pcapng` file. NetScope immediately flushes previous capture state and visualizes the fresh telemetry.
+2. **Custom PCAP Upload:** Click **"Upload PCAP Capture"** to drag-and-drop your own `.pcap` or `.pcapng` file. Nexaptra immediately flushes previous capture state and visualizes the fresh telemetry.
 3. **Interactive Topology:** Navigate to the **Topology Graph** (`/network`) to inspect live communication nodes, bidirectional edge counts, and zoom/pan through the network matrix.
 
 ---
@@ -155,7 +155,7 @@ NetScope is continuously deployed and accessible online:
 ### 1. Backend Service
 
 ```bash
-cd netscope/backend
+cd backend
 
 # Create and activate Python virtual environment
 python3 -m venv .venv
@@ -176,7 +176,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 In a second terminal:
 
 ```bash
-cd netscope/frontend
+cd frontend
 
 # Install dependencies
 npm install
@@ -191,7 +191,7 @@ npm run dev
 
 ## Deployment on Render
 
-NetScope includes native **Render Blueprint** support via [`render.yaml`](render.yaml) for zero-configuration, single-service deployment.
+Nexaptra includes native **Render Blueprint** support via [`render.yaml`](render.yaml) for zero-configuration, single-service deployment.
 
 ### Single-Service Architecture
 In production, the compiled React SPA static assets (`dist/`) are directly mounted and served by FastAPI, eliminating CORS complexity and cross-domain routing latency:
@@ -199,7 +199,7 @@ In production, the compiled React SPA static assets (`dist/`) are directly mount
 ```yaml
 services:
   - type: web
-    name: netscope
+    name: nexaptra
     runtime: python
     buildCommand: "cd frontend && npm install && npm run build && cd ../backend && pip install -r requirements.txt"
     startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
@@ -229,11 +229,11 @@ services:
 
 ## Testing & Verification
 
-NetScope maintains a 100% automated test pass rate covering analyzers, validation, API endpoints, and production SPA routing:
+Nexaptra maintains a 100% automated test pass rate covering analyzers, validation, API endpoints, and production SPA routing:
 
 ```bash
 # Run backend test suite
-cd netscope/backend
+cd backend
 .venv/bin/pytest -v
 ```
 
@@ -261,7 +261,7 @@ tests/test_production.py::test_api_sample_endpoint[asyncio] PASSED       [100%]
 
 ```bash
 # Verify frontend production build
-cd netscope/frontend
+cd frontend
 npm run build
 ```
 
@@ -272,13 +272,13 @@ npm run build
 1. **Memory Isolation:** Packet frames are dissected lazily using Python iterators. Raw packet payload byte buffers are bounded to prevent memory denial-of-service.
 2. **Ephemeral File Storage:** Uploaded captures are staged using secure randomized file descriptors via `tempfile.mkstemp` and guaranteed to be destroyed in `finally` blocks upon analysis completion.
 3. **Magic Byte Enforcement:** The ingestion engine inspects byte offset 0 of every file chunk to ensure adherence to libpcap / pcapng specifications, rejecting disguised binaries or shell scripts.
-4. **Offline Capability:** NetScope requires zero outbound telemetry, external third-party APIs, or external lookups for core packet analysis.
+4. **Offline Capability:** Nexaptra requires zero outbound telemetry, external third-party APIs, or external lookups for core packet analysis.
 
 ---
 
 ## Authorship & License
 
-- **Project:** NetScope Intelligent PCAP Forensics
+- **Project:** Nexaptra Intelligent PCAP Forensics
 - **Live Platform:** [https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)
 - **Author & Maintainer:** **ARK** ([https://github.com/T-ARK](https://github.com/T-ARK))
 - **License:** Released under the [MIT License](LICENSE).

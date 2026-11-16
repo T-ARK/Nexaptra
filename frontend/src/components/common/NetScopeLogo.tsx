@@ -1,13 +1,13 @@
 import React from 'react';
 import { Shield } from 'lucide-react';
 
-interface NetScopeLogoProps {
+interface NexaptraLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showText?: boolean;
   className?: string;
 }
 
-export const NetScopeLogo: React.FC<NetScopeLogoProps> = ({
+export const NexaptraLogo: React.FC<NexaptraLogoProps> = ({
   size = 'md',
   showText = false,
   className = '',
@@ -62,7 +62,7 @@ export const NetScopeLogo: React.FC<NetScopeLogoProps> = ({
         {/* Mascot Centerpiece */}
         <img
           src="/logo-green.png"
-          alt="NetScope Shield Emblem"
+          alt="Nexaptra Shield Emblem"
           className={`${s.img} object-contain relative z-10 drop-shadow-[0_0_8px_rgba(0,255,136,0.85)] filter brightness-110 transition-transform group-hover:scale-110`}
         />
       </div>
@@ -71,7 +71,7 @@ export const NetScopeLogo: React.FC<NetScopeLogoProps> = ({
       {showText && (
         <div>
           <span className={`${s.title} font-display font-bold tracking-wider text-white block leading-tight`}>
-            NETSCOPE
+            NEXAPTRA
           </span>
           <span className={`block ${s.sub} font-mono tracking-widest text-[#888888] uppercase mt-0.5`}>
             TACTICAL PCAP FORENSICS
@@ -81,3 +81,6 @@ export const NetScopeLogo: React.FC<NetScopeLogoProps> = ({
     </div>
   );
 };
+
+// Backward-compatible alias
+export const NetScopeLogo = NexaptraLogo;

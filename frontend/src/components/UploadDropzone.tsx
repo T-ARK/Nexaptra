@@ -55,7 +55,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
   const validateAndSelect = (file: File) => {
     const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
     if (ext !== '.pcap' && ext !== '.pcapng') {
-      alert('Only .pcap and .pcapng capture formats are supported in NetScope.');
+      alert('Only .pcap and .pcapng capture formats are supported in Nexaptra.');
       return;
     }
     onFileSelected(file);

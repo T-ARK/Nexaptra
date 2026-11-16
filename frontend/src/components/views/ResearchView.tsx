@@ -7,7 +7,7 @@ interface ResearchViewProps {
 }
 
 export const ResearchView: React.FC<ResearchViewProps> = ({ analysisData }) => {
-  const [testPayload, setTestPayload] = useState('GET /index.html HTTP/1.1\r\nHost: example.com\r\nUser-Agent: NetScope/1.0\r\n\r\n');
+  const [testPayload, setTestPayload] = useState('GET /index.html HTTP/1.1\r\nHost: example.com\r\nUser-Agent: Nexaptra/1.0\r\n\r\n');
 
   // Calculate Shannon entropy of the test string
   const calculateEntropy = (str: string): number => {

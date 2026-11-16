@@ -1,4 +1,4 @@
-# NetScope Tactical PCAP Forensics Platform
+# Nexaptra Tactical PCAP Forensics Platform
 # Production Deployment: https://netscope-kx6h.onrender.com/
 # Repository: https://github.com/T-ARK/NetScope
 
