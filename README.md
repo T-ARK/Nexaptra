@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![Live Platform](https://img.shields.io/badge/LIVE%20PLATFORM-netscope--kx6h.onrender.com-00ff88?style=for-the-badge&logo=render&logoColor=black)](https://netscope-kx6h.onrender.com/)
-[![GitHub Repo](https://img.shields.io/badge/GITHUB-T--ARK%2FNetScope-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/T-ARK/NetScope)
+[![Live Platform](https://img.shields.io/badge/LIVE%20PLATFORM-nexaptra.onrender.com-00ff88?style=for-the-badge&logo=render&logoColor=black)](https://nexaptra.onrender.com/)
+[![GitHub Repo](https://img.shields.io/badge/GITHUB-T--ARK%2FNexaptra-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/T-ARK/Nexaptra)
 
 <br/>
 
@@ -19,7 +19,7 @@
 
 ---
 
-> ### 🌐 **Live Interactive Platform:** [https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)
+> ### 🌐 **Live Interactive Platform:** [https://nexaptra.onrender.com/](https://nexaptra.onrender.com/)
 > **Nexaptra is live on Render.** Explore the pre-parsed telemetry dataset, upload custom `.pcap` or `.pcapng` files for instant streaming dissection, inspect bidirectional 5-tuple flows, visualize live network topology, and evaluate the 14-rule threat hunting matrix.
 
 ---
@@ -136,7 +136,7 @@ Nexaptra's built-in heuristic engine evaluates captures against 14 foundational 
 
 Nexaptra is continuously deployed and accessible online:
 
-🔗 **[https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)**
+🔗 **[https://nexaptra.onrender.com/](https://nexaptra.onrender.com/)**
 
 1. **One-Click Pre-Parsed Telemetry:** Click **"Explore Dashboard"** to instantly load the built-in synthetic PCAP (`sample_traffic.pcap`), demonstrating DNS resolution, HTTP conversations, TLS handshakes, and ICMP frames.
 2. **Custom PCAP Upload:** Click **"Upload PCAP Capture"** to drag-and-drop your own `.pcap` or `.pcapng` file. Nexaptra immediately flushes previous capture state and visualizes the fresh telemetry.
@@ -279,6 +279,6 @@ npm run build
 ## Authorship & License
 
 - **Project:** Nexaptra Intelligent PCAP Forensics
-- **Live Platform:** [https://netscope-kx6h.onrender.com/](https://netscope-kx6h.onrender.com/)
+- **Live Platform:** [https://nexaptra.onrender.com/](https://nexaptra.onrender.com/)
 - **Author & Maintainer:** **ARK** ([https://github.com/T-ARK](https://github.com/T-ARK))
 - **License:** Released under the [MIT License](LICENSE).

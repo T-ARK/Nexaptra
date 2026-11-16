@@ -1,10 +1,10 @@
 # Nexaptra Tactical PCAP Forensics Platform
-# Production Deployment: https://netscope-kx6h.onrender.com/
-# Repository: https://github.com/T-ARK/NetScope
+# Production Deployment: https://nexaptra.onrender.com/
+# Repository: https://github.com/T-ARK/Nexaptra
 
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /assets/*.map
 
-Sitemap: https://netscope-kx6h.onrender.com/sitemap.xml
+Sitemap: https://nexaptra.onrender.com/sitemap.xml

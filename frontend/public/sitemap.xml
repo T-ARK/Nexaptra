@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://netscope-kx6h.onrender.com/</loc>
+    <loc>https://nexaptra.onrender.com/</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://netscope-kx6h.onrender.com/#telemetry</loc>
+    <loc>https://nexaptra.onrender.com/#telemetry</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://netscope-kx6h.onrender.com/#forensics</loc>
+    <loc>https://nexaptra.onrender.com/#forensics</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://netscope-kx6h.onrender.com/#threats</loc>
+    <loc>https://nexaptra.onrender.com/#threats</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://netscope-kx6h.onrender.com/docs</loc>
+    <loc>https://nexaptra.onrender.com/docs</loc>
     <lastmod>2026-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
