@@ -1,9 +1,10 @@
 # NetScope Tactical PCAP Forensics Platform
-# https://github.com/T-ARK
+# Production Deployment: https://netscope-kx6h.onrender.com/
+# Repository: https://github.com/T-ARK/NetScope
 
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /assets/*.map
 
-Sitemap: https://github.com/T-ARK/sitemap.xml
+Sitemap: https://netscope-kx6h.onrender.com/sitemap.xml
